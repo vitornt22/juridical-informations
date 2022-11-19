@@ -1,30 +1,29 @@
 {% extends 'adm/baseAdmin.html' %}
 
+{%block button%}
+<form method="GET" class="d-none d-md-flex input-group w-auto my-auto">
+  <a href="{%url 'process:register'  %}" type="button" class="btn input-group-text border-0">Cadastrar {{tag}}</a>
+</form>
+{% endblock %}
+
 {%block content%}
 <table class="table table-stripped">
     <tbody>
       <tr>
         <td>Status</td>
         <td><b>Nº</b></td>
+        <td><b>Réu</b></td>
         <td><b>Assunto</b></td>
-        <td></td>
-        <td>Mar 10</td>
+        <td>Juiz</td>
+        <td>Distribuição</td>
       </tr>
       <tr>
         <td>Ativo</td>
         <td>0002617-09.2020.8.26.0041</td>
         <td>0002617-09.2020.8.26.0041</td>
         <td>Assunto X</td>
-        <td><i class="fa fa-paperclip"></i></td>
-        <td>Mar 10</td>
-      </tr>
-      <tr>
-        <td>Ativo</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>Assunto X</td>
-        <td></td>
-        <td>Mar 08</td>
+        <td></i>Flavio ds Silva Sousa Medeiros</td>
+        <td>23/10/2022</td>
       </tr>
       <tr>
         <td>Ativo</td>
@@ -32,7 +31,7 @@
         <td>0002617-09.2020.8.26.0041</td>
         <td>Assunto X</td>
         <td></td>
-        <td>Mar 08</td>
+        <td>23/10/2022</td>
       </tr>
       <tr>
         <td>Ativo</td>
@@ -40,7 +39,7 @@
         <td>0002617-09.2020.8.26.0041</td>
         <td>Assunto X</td>
         <td></td>
-        <td>Mar 08</td>
+        <td>23/10/2022</td>
       </tr>
       <tr>
         <td>Ativo</td>
@@ -48,7 +47,7 @@
         <td>0002617-09.2020.8.26.0041</td>
         <td>Assunto X</td>
         <td></td>
-        <td>Mar 08</td>
+        <td>23/10/2022</td>
       </tr>
       <tr>
         <td>Ativo</td>
@@ -56,7 +55,7 @@
         <td>0002617-09.2020.8.26.0041</td>
         <td>Assunto X</td>
         <td></td>
-        <td>Mar 08</td>
+        <td>23/10/2022</td>
       </tr>
       <tr>
         <td>Ativo</td>
@@ -64,7 +63,15 @@
         <td>0002617-09.2020.8.26.0041</td>
         <td>Assunto X</td>
         <td></td>
-        <td>Mar 08</td>
+        <td>23/10/2022</td>
+      </tr>
+      <tr>
+        <td>Ativo</td>
+        <td>0002617-09.2020.8.26.0041</td>
+        <td>0002617-09.2020.8.26.0041</td>
+        <td>Assunto X</td>
+        <td></td>
+        <td>23/10/2022</td>
       </tr>
 
     </tbody>

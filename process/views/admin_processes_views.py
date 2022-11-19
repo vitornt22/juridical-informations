@@ -13,7 +13,8 @@ from process.models import Process
 class ProcessDetails(View):
 
     def render_process(self, form):
-        return render(self.request, 'admin/processDetail.html', context={'form': form, 'active': 1})
+        #html = 'adm/processDetail' if form is not None else 'adm/processRegister'
+        return render(self.request, 'adm/processRegister.html', context={'form': form, 'active': 1})
 
     def get_process(self, id=None):
         process = None
@@ -29,7 +30,8 @@ class ProcessDetails(View):
 
     def get(self, request, id=None):
         process = self.get_process(id)
-        form = ProcessForm(instance=process)
+        form = ProcessForm(instance=process or None)
+        print("FORM is : ", form)
         return self.render_process(form)
 
     def post(self, request, id=None):
@@ -62,12 +64,12 @@ class ProcessList(ListView):
     template_name = 'adm/processList.html'
 
     def get_queryset(self, *args, **kwargs):
-       # search= self.request.query_param.get
+        # search= self.request.query_param.get
         qs = super().get_queryset(*args, **kwargs)
 
         return qs
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        ctx.update({"active": 1})
+        ctx.update({"active": 1, 'tag': 'Processo'})
         return ctx
