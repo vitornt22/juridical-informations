@@ -1,0 +1,64 @@
+#home {
+	color: rgb(255, 255, 255);
+	background: url("../img/capa.png");
+	background-size: calc(100%);
+	background-repeat: repeat-y;
+	background-position: center center;
+ 
+}
+
+hr.solid {
+	border-top: 2px solid #bbb;
+  }
+
+
+
+.navbar-color{
+	color: #FFF;
+	background-color: #193e6e;
+}
+
+.black{
+	color:#000
+	
+}
+
+.font{
+	
+	color: rgb(255, 255, 255);
+	font-family: Georgia, 'Times New Roman', Times, serif;
+	font-size: 3.5rem;
+	font-weight: 900;
+
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: white;
+	font-size: 1.2rem
+}
+
+.hiddenimg{
+	display: block;
+}
+
+
+
+.subtitle{
+	font-size: 1.5rem;
+}
+
+body {
+  margin-top: 50px;
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  color: #39464e;
+}
+
+.navbar-default {
+  background-color: #FFF;
+  margin-left: 200px;
+}
+
+/*main side bar*/
