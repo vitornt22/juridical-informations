@@ -2,6 +2,8 @@
 # flake8: noqa
 from django.urls import path
 
+from parts import views as part_views
+
 from . import views
 
 app_name = 'process'

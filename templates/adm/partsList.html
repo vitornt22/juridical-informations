@@ -1,0 +1,43 @@
+{% extends 'adm/baseAdmin.html' %}
+
+{% block searchInput %}
+<form class="d-none d-md-flex input-group w-auto my-auto">
+  <input name="search" autocomplete="off" type="search" class="form-control rounded"
+    placeholder='Pesquisar Processos' style="min-width: 10px; width:60vh;" />
+  <span class="input-group-text border-0"><i class="fas fa-search"></i></span>
+</form>
+{% endblock searchInput %}
+
+{%block button%}
+<form method="GET" class="d-none d-md-flex input-group w-auto my-auto">
+  <a href="{% url 'process:register'  %}" type="button" class="btn input-group-text border-0">Cadastrar {{tag}}</a>
+</form>
+{% endblock %}
+
+{%block content%}
+<table class="table table-stripped">
+    <tbody>
+      <tr>
+        <td><b>Categoria</b></td>
+        <td><b>Nome</b></td>
+        <td><b>CPF</b></td>
+      </tr>
+      {% for i in processes  %}
+      <tr>
+        {% if  i.status%}
+        <td>Ativo</td>
+        {%else %}
+        <td>Inativo</td>
+        {% endif %}
+      <td>{{i.number}}</td>
+        <td>Antonio Jose Alves</td>
+        <td>{{i.subject}}</td>
+        <td></td>
+        <td>{{i.distribution}}</td>
+      </tr>
+      {% endfor %}
+      
+
+    </tbody>
+  </table>
+{% endblock %}

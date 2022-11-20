@@ -1,9 +1,7 @@
 {% extends 'adm/baseAdmin.html' %}
+{% load static %}
 {% load crispy_forms_tags%}
 
-{%block addLink%}
-  
-{%endblock addLink%}
 
 
 
@@ -51,7 +49,7 @@
               <div class="col-lg-4 form-group">
                 <label for="defendant">Selecionar Réu</label>
 
-                  <select id="defendant" class="form-control" name="defendant">
+                  <select id="defendant" class="form-control" name="defendant" required>
                     {%for i in defendants %}
                       <option value={{i.id}}>{{i}}</option>
                     {%endfor%}
@@ -96,14 +94,17 @@
           <div class="card-footer">
             <a href="#"href="{% url 'process:list'  %}" type="button" class="btn  btn-light  border-0">Voltar</a>
             <button type="submit" class="btn btn-primary">Cadastrar</button>
-            <a type="submit" class="btn bg-blue">Inserir nova Parte</a>
-
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
+              Inserir Nova Parte
+            </button>
           </div>
         </form>
       </div>
       <!-- /.card -->
     </div>
   </div>
+
+  {% include 'adm/part_modal.html' %}
   
 {%endblock content%}
 

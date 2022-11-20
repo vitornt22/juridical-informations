@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic.list import ListView
 
+from parts.forms import PartForm
+from parts.models import Part
 from process.forms import ProcessForm
 from process.models import Process
 
@@ -13,9 +15,19 @@ from process.models import Process
 class ProcessDetails(View):
 
     def render_process(self, form, html):
+        partForm = PartForm()
+        jugdes = Part.objects.filter(category="J")
+        authors = Part.objects.filter(category="A")
+        defendants = Part.objects.filter(category="R")
         print('entra aqui')
-        return render(self.request, html, context={'form': form,
-                                                   'active': 1, 'tag': 'Projeto', 'back': 'process:list'})
+        return render(
+            self.request,
+            html, context={
+                'form': form,
+                'active': 1, 'tag': 'Projeto', 'back': 'process:list',
+                'partForm': partForm, 'judges': jugdes, 'authors': authors,
+                'defendants': defendants,
+            })
 
     def get_process(self, id=None):
         process = None

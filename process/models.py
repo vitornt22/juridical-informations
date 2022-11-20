@@ -14,6 +14,7 @@ class Process (models.Model):
     county = models.CharField(max_length=50, null=True, blank=True)
     controll = models.CharField(max_length=50, null=True, blank=True)
     distribution = models.DateField(auto_now_add=True)
+    jugde = models.CharField(max_length=100)
     value = models.FloatField()
     status = models.BooleanField(default=True)
     slug = models.SlugField(null=True, blank=True)
