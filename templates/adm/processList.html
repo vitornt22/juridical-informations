@@ -22,8 +22,10 @@
         <td><b>Nº</b></td>
         <td><b>Réu</b></td>
         <td><b>Assunto</b></td>
-        <td>Juiz</td>
-        <td>Distribuição</td>
+        <td><b>Juiz</b></td>
+        <td><b>Distribuição</b></td>
+        <td></td>
+
       </tr>
       {% for i in processes  %}
       <tr>
@@ -37,6 +39,8 @@
         <td>{{i.subject}}</td>
         <td></td>
         <td>{{i.distribution}}</td>
+        <td><a href="{%url 'process:detail' i.id  %}" style="color:#FFF;" class='btn btn-primary'>detalhes</button></td>
+
       </tr>
       {% endfor %}
       

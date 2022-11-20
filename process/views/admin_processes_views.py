@@ -16,9 +16,9 @@ class ProcessDetails(View):
 
     def render_process(self, form, html):
         partForm = PartForm()
-        jugdes = Part.objects.filter(category="J")
-        authors = Part.objects.filter(category="A")
-        defendants = Part.objects.filter(category="R")
+        jugdes = Part.objects.filter(category="Juiz")
+        authors = Part.objects.filter(category="Autor")
+        defendants = Part.objects.filter(category="Réu")
         print('entra aqui')
         return render(
             self.request,
@@ -32,27 +32,35 @@ class ProcessDetails(View):
     def get_process(self, id=None):
         process = None
         if id is not None:
+            print("NOT NONE")
             process = Process.objects.filter(
-                pk=id
+                id=id
             ).first
 
             if not process:
+                print("NENBNSNSBA")
                 raise Http404()
 
         return process
 
     def get(self, request, id=None):
         print('here')
-        html = 'adm/processRegister.html' if id is None else 'adm/processDetail.html'
 
         process = self.get_process(id)
-        form = ProcessForm(instance=process or None)
+        form = ProcessForm(request.POST, instance=process)
+        html = 'adm/processRegister.html' if id is None else 'adm/processDetail.html'
+        print(html)
         return self.render_process(form, html)
 
     def post(self, request, id=None):
         process = self.get_process(id)
         print('entrando POST')
-        form = ProcessForm(request.POST or None, instance=process)
+        print("my request", request.POST.get(
+            'register'))
+        form = ProcessForm(request.POST or None,
+                           instance=process)
+        judge = request.POST.get('judge')
+        print("MY JUIZ", judge)
 
         if form.is_valid():
             # now form is valid and i can to save it

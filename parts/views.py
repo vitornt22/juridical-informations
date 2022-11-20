@@ -82,5 +82,5 @@ class PartList(ListView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        ctx.update({"active": 1, 'tag': 'Parto'})
+        ctx.update({"active": 2, 'tag': 'Parto'})
         return ctx

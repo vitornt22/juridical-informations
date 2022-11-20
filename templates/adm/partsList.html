@@ -21,19 +21,16 @@
         <td><b>Categoria</b></td>
         <td><b>Nome</b></td>
         <td><b>CPF</b></td>
+        <td><b></b></td>
       </tr>
-      {% for i in processes  %}
+      {% for i in parts  %}
+      
       <tr>
-        {% if  i.status%}
-        <td>Ativo</td>
-        {%else %}
-        <td>Inativo</td>
-        {% endif %}
-      <td>{{i.number}}</td>
-        <td>Antonio Jose Alves</td>
-        <td>{{i.subject}}</td>
-        <td></td>
-        <td>{{i.distribution}}</td>
+      <td>{{i.category}}</td>
+        <td>{{i.name}}</td>
+        <td>{{i.cpf}}</td>
+        <td><a href="{%url 'part:detail' i.id%  }" style="color: #FFF;"  class='btn btn-primary'>detalhes</a></td>
+
       </tr>
       {% endfor %}
       

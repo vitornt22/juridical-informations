@@ -14,9 +14,9 @@
         <div class="card-header">
           <h3 class="card-title">Cadastrar Processo</h3>
         </div>
-        <!-- /.card-header -->
+        <!-- /.card-header -->S
         <!-- form start -->
-        <form method="POST" action={%url  'process:register'%} enctype="multipart/form-data">
+        <form method="POST" action="{%url  'process:register'%}" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="card-body">
               <div class="row">
@@ -87,13 +87,15 @@
                     {{form.value|as_crispy_field}}
                   </div> 
                   <div class="col-lg-3 form-group">
+                    {{form.number|as_crispy_field}}
+
                   </div>  
             </div>
           </div>
           <!-- /.card-body -->
           <div class="card-footer">
             <a href="#"href="{% url 'process:list'  %}" type="button" class="btn  btn-light  border-0">Voltar</a>
-            <button type="submit" class="btn btn-primary">Cadastrar</button>
+            <button type="submit" name="register" class="btn btn-primary">Cadastrar</button>
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
               Inserir Nova Parte
             </button>
