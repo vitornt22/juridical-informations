@@ -23,13 +23,15 @@ class PartDetails(View):
         if id is not None:
             part = Part.objects.filter(
                 pk=id
-            ).first
+            ).first()
 
             if not part:
                 raise Http404()
+        print("MYY PARTTTTTT", part)
         return part
 
     def get(self, request, id=None):
+        print("diiiiidiidi", id)
         html = 'adm/processRegister.html' if id is None else 'adm/processDetail.html'
         part = self.get_part(id)
 
@@ -39,18 +41,21 @@ class PartDetails(View):
     def post(self, request, id=None, path=None):
         part = self.get_part(id)
         print('entrando POST')
-        form = PartForm(request.POST or None, instance=part)
-        print("PATH", path)
+        form = PartForm(request.POST, request.FILES, instance=part)
+        print("IDDD", id)
 
         if form.is_valid():
             # now form is valid and i can to save it
             p = form.save(commit=False)
             # now i can make changes in object edited
             p.save()
-
-            messages.success(request, 'Parto salvo com sucesso!')
-            route = 'parte:register' if path == 'parte' else 'process:register'
-            return redirect(reverse(route, args=(id)))
+            messages.success(request, 'Parte cadastrada com sucesso!')
+            if id is not None:
+                messages.success(request, 'Processo Editado  com sucesso!')
+                return redirect('part:list')
+            else:
+                messages.success(request, 'Processo Cadastrado com sucesso!')
+                return redirect(reverse('process:register'))
         else:
             print('no')
 

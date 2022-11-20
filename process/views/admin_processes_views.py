@@ -14,7 +14,7 @@ from process.models import Process
 
 class ProcessDetails(View):
 
-    def render_process(self, form, html):
+    def render_process(self, form, html, id=None):
         partForm = PartForm()
         jugdes = Part.objects.filter(category="Juiz")
         authors = Part.objects.filter(category="Autor")
@@ -26,7 +26,7 @@ class ProcessDetails(View):
                 'form': form,
                 'active': 1, 'tag': 'Projeto', 'back': 'process:list',
                 'partForm': partForm, 'judges': jugdes, 'authors': authors,
-                'defendants': defendants,
+                'defendants': defendants, 'id': id,
             })
 
     def get_process(self, id=None):
@@ -35,7 +35,7 @@ class ProcessDetails(View):
             print("NOT NONE")
             process = Process.objects.filter(
                 id=id
-            ).first
+            ).first()
 
             if not process:
                 print("NENBNSNSBA")
@@ -47,10 +47,11 @@ class ProcessDetails(View):
         print('here')
 
         process = self.get_process(id)
-        form = ProcessForm(request.POST, instance=process)
+        print("GET MY PROJECT", process)
+        form = ProcessForm(instance=process)
         html = 'adm/processRegister.html' if id is None else 'adm/processDetail.html'
         print(html)
-        return self.render_process(form, html)
+        return self.render_process(form, html, id)
 
     def post(self, request, id=None):
         process = self.get_process(id)
@@ -67,15 +68,19 @@ class ProcessDetails(View):
             p = form.save(commit=False)
             # now i can make changes in object edited
             p.save()
-            messages.success(request, 'Processo salvo com sucesso!')
-            route = 'process:register' if id is None else 'process:details'
-            return redirect(reverse(route, args=(id or None)))
+
+            if id is not None:
+                messages.success(request, 'Processo Editado  com sucesso!')
+                return redirect(reverse('process:detail', id))
+            else:
+                messages.success(request, 'Processo Cadastrado com sucesso!')
+                return redirect(reverse('process:register'))
         else:
             print('no')
 
         html = 'adm/processRegister.html' if id is None else 'adm/processDetail.html'
 
-        return self.render_process(form, html)
+        return self.render_process(form, html, id)
 
 
 # dont forget add login required later

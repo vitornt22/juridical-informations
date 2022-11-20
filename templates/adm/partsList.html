@@ -10,7 +10,7 @@
 
 {%block button%}
 <form method="GET" class="d-none d-md-flex input-group w-auto my-auto">
-  <a href="{% url 'process:register'  %}" type="button" class="btn input-group-text border-0">Cadastrar {{tag}}</a>
+  <a href="#" type="button" class="btn input-group-text border-0">Cadastrar Parte</a>
 </form>
 {% endblock %}
 
@@ -29,7 +29,7 @@
       <td>{{i.category}}</td>
         <td>{{i.name}}</td>
         <td>{{i.cpf}}</td>
-        <td><a href="{%url 'part:detail' i.id%  }" style="color: #FFF;"  class='btn btn-primary'>detalhes</a></td>
+        <td><a href="{%url 'part:detail' i.id %}" style="color: #FFF;"  class='btn btn-primary'>detalhes</a></td>
 
       </tr>
       {% endfor %}

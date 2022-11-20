@@ -14,20 +14,14 @@
       <!-- general form elements -->
       <div class="card card-lightblue">
         <div class="card-header">
-          <h3 class="card-title">Editar Dados do Processo</h3>
+          <h3 class="card-title">Cadastrar {{tag}}</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form method="POST" action="{%url  'process:detail' id %}" enctype="multipart/form-data">
+        <form method="POST" enctype="multipart/form-data">
           {% csrf_token %}
-          <div class="card-body">
-              {% include 'adm/processForm.html' %}
-          </div>
-          <!-- /.card-body -->
           <div class="card-footer">
-            <a href="{%url 'process:list' %}" type="button" class="btn ">Voltar</a>
-
-            <button style="color:#FFF;" type="submit" class="btn bg-primary">Editar</button>
+            <button type="submit" class="btn bg-lightblue">Cadastrar</button>
           </div>
         </form>
       </div>
@@ -39,11 +33,6 @@
 
 {%block addScript%}
 <script>
-  {% for msg in messages%}
-  Swal.fire(
-    '{{msg}}',
-    'success'
-  )
-  {%endfor%}
+  
 </script>
 {%endblock addScript%}

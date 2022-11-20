@@ -1,0 +1,76 @@
+{% load crispy_forms_tags%}
+
+<div class="row">
+  <div class="col-lg-4 form-group">
+      {{form.county|as_crispy_field}}
+  </div>
+  <div class="col-lg-4 form-group">
+    {{form.class_project|as_crispy_field}}
+  </div>
+  <div class="col-lg-4 form-group">
+    {{form.organ|as_crispy_field}}
+  </div>
+</div>
+
+<div class="row">
+<div class="col-lg-4 form-group">
+  {{form.area|as_crispy_field}}
+</div>
+  <div class="col-lg-4 form-group">
+    {{form.court|as_crispy_field}}
+  </div>
+  <div class="col-lg-4 form-group">
+    {{form.controll|as_crispy_field}}
+  </div>
+ 
+</div>
+
+<div class="row">
+
+<div class="col-lg-4 form-group">
+  <label for="defendant">Selecionar Réu</label>
+
+    <select id="defendant" class="form-control" name="defendant" required>
+      <option value={{judge}}>Selecione</option>
+      {%for i in defendants %}
+        <option value={{i.id}}>{{i}}</option>
+      {%endfor%}
+    </select>                  
+</div>
+<div class="col-lg-4 form-group">
+  <label for="judge">Selecionar Juiz</label>
+
+    <select id="judge" class="form-control" name="judge">
+      <option value="">Selecione</option>
+      {%for i in judges %}
+        <option value={{i.id}}>{{i}}</option>
+      {%endfor%}
+    </select>              
+</div>
+<div class="col-lg-4 form-group">
+  <label for="author">Selecionar Autor</label>
+    <select id="author" class="form-control" name="author">
+      <option value="">Selecione</option>
+      {%for i in authors %}
+        <option value={{i.id}}>{{i}}</option>
+      {%endfor%}
+    </select>                 
+             
+</div>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 form-group">
+     {{form.forum|as_crispy_field}}
+    </div>
+    <div class="col-lg-3 form-group">
+      {{form.subject|as_crispy_field}}
+    </div>
+    <div class="col-lg-3 form-group">
+      {{form.value|as_crispy_field}}
+    </div> 
+    <div class="col-lg-3 form-group">
+      {{form.number|as_crispy_field}}
+
+    </div>  
+</div>

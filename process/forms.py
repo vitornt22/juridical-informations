@@ -26,6 +26,7 @@ class ProcessForm(forms.ModelForm):
             'organ': 'Orgão',
             'area': 'Área',
             'controll': 'Controle',
+
         }
 
         widgets = {
