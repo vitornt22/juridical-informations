@@ -1,8 +1,16 @@
 {% extends 'adm/baseAdmin.html' %}
 
+{% block searchInput %}
+<form class="d-none d-md-flex input-group w-auto my-auto">
+  <input name="search" autocomplete="off" type="search" class="form-control rounded"
+    placeholder='Pesquisar Processos' style="min-width: 10px; width:60vh;" />
+  <span class="input-group-text border-0"><i class="fas fa-search"></i></span>
+</form>
+{% endblock searchInput %}
+
 {%block button%}
 <form method="GET" class="d-none d-md-flex input-group w-auto my-auto">
-  <a href="{%url 'process:register'  %}" type="button" class="btn input-group-text border-0">Cadastrar {{tag}}</a>
+  <a href="{% url 'process:register'  %}" type="button" class="btn input-group-text border-0">Cadastrar {{tag}}</a>
 </form>
 {% endblock %}
 
@@ -17,62 +25,21 @@
         <td>Juiz</td>
         <td>Distribuição</td>
       </tr>
+      {% for i in processes  %}
       <tr>
+        {% if  i.status%}
         <td>Ativo</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>Assunto X</td>
-        <td></i>Flavio ds Silva Sousa Medeiros</td>
-        <td>23/10/2022</td>
-      </tr>
-      <tr>
-        <td>Ativo</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>Assunto X</td>
+        {%else %}
+        <td>Inativo</td>
+        {% endif %}
+      <td>{{i.number}}</td>
+        <td>Antonio Jose Alves</td>
+        <td>{{i.subject}}</td>
         <td></td>
-        <td>23/10/2022</td>
+        <td>{{i.distribution}}</td>
       </tr>
-      <tr>
-        <td>Ativo</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>Assunto X</td>
-        <td></td>
-        <td>23/10/2022</td>
-      </tr>
-      <tr>
-        <td>Ativo</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>Assunto X</td>
-        <td></td>
-        <td>23/10/2022</td>
-      </tr>
-      <tr>
-        <td>Ativo</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>Assunto X</td>
-        <td></td>
-        <td>23/10/2022</td>
-      </tr>
-      <tr>
-        <td>Ativo</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>Assunto X</td>
-        <td></td>
-        <td>23/10/2022</td>
-      </tr>
-      <tr>
-        <td>Ativo</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>0002617-09.2020.8.26.0041</td>
-        <td>Assunto X</td>
-        <td></td>
-        <td>23/10/2022</td>
-      </tr>
+      {% endfor %}
+      
 
     </tbody>
   </table>

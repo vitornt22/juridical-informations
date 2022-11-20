@@ -12,9 +12,10 @@ from process.models import Process
 
 class ProcessDetails(View):
 
-    def render_process(self, form):
-        #html = 'adm/processDetail' if form is not None else 'adm/processRegister'
-        return render(self.request, 'adm/processRegister.html', context={'form': form, 'active': 1})
+    def render_process(self, form, html):
+        print('entra aqui')
+        return render(self.request, html, context={'form': form,
+                                                   'active': 1, 'tag': 'Projeto', 'back': 'process:list'})
 
     def get_process(self, id=None):
         process = None
@@ -23,29 +24,38 @@ class ProcessDetails(View):
                 pk=id
             ).first
 
-        if not process:
-            raise Http404()
+            if not process:
+                raise Http404()
 
         return process
 
     def get(self, request, id=None):
+        print('here')
+        html = 'adm/processRegister.html' if id is None else 'adm/processDetail.html'
+
         process = self.get_process(id)
         form = ProcessForm(instance=process or None)
-        print("FORM is : ", form)
-        return self.render_process(form)
+        return self.render_process(form, html)
 
     def post(self, request, id=None):
         process = self.get_process(id)
-        form = ProcessDetails(data=request.POST or None, instance=process)
+        print('entrando POST')
+        form = ProcessForm(request.POST or None, instance=process)
 
         if form.is_valid():
             # now form is valid and i can to save it
-            process = form.save(commit=False)
+            p = form.save(commit=False)
             # now i can make changes in object edited
-            process.save()
+            p.save()
             messages.success(request, 'Processo salvo com sucesso!')
-            # return redirect here
-        return self.render_process(form)
+            route = 'process:register' if id is None else 'process:details'
+            return redirect(reverse(route, args=(id or None)))
+        else:
+            print('no')
+
+        html = 'adm/processRegister.html' if id is None else 'adm/processDetail.html'
+
+        return self.render_process(form, html)
 
 
 # dont forget add login required later

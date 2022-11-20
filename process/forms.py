@@ -10,8 +10,6 @@ from .models import Process
 
 
 class ProcessForm(forms.ModelForm):
-    distribution = forms.DateField(label="Data", required=False, input_formats=settings.DATE_INPUT_FORMATS,
-                                   widget=forms.DateInput(format="%d/%m/%Y", attrs={'readOnly': False, 'id': 'Distribuição', 'data-mask': '99/99/9999'}))
 
     class Meta:
         model = Process
@@ -26,20 +24,24 @@ class ProcessForm(forms.ModelForm):
             'county': 'Comarca',
             'judge': 'Juiz',
             'value': 'Valor da Ação',
-
+            'organ': 'Orgão',
+            'area': 'Área',
+            'controll': 'Controle',
         }
 
         widgets = {
             'id': forms.HiddenInput(),
-            'class_project': forms.TextInput(attrs={'placeholder': ' Classe', 'required': 'True'}),  # noqa
-            'number': forms.TextInput(attrs={'placeholder': ' Nº do Processo', 'required': 'True'}),  # noqa
-            'court': forms.TextInput(attrs={'placeholder': ' Vara', 'required': 'True'}),  # noqa
-            'forum': forms.TextInput(attrs={'placeholder': ' Foro', 'required': 'True'}),  # noqa
-            'subject': forms.TextInput(attrs={'placeholder': ' Assunto', 'required': 'True'}),  # noqa
-            'county': forms.TextInput(attrs={'placeholder': ' Comarca', 'required': 'True'}),  # noqa
-            'judge': forms.TextInput(attrs={'placeholder': ' Juiz', 'required': 'True'}),  # noqa
-            'value': forms.NumberInput(attrs={'placeholder': ' Valor', 'required': 'True'}),  # noqa
-
+            'class_project': forms.TextInput(attrs={'placeholder': ' Classe',  'class': 'form-control', 'class': 'form-control'}),  # noqa
+            'number': forms.TextInput(attrs={'placeholder': ' Nº do Processo',  'class': 'form-control'}),  # noqa
+            'court': forms.TextInput(attrs={'placeholder': ' Vara',  'class': 'form-control'}),  # noqa
+            'forum': forms.TextInput(attrs={'placeholder': ' Foro',  'class': 'form-control'}),  # noqa
+            'subject': forms.TextInput(attrs={'placeholder': ' Assunto',  'class': 'form-control'}),  # noqa
+            'county': forms.TextInput(attrs={'placeholder': ' Comarca', 'class': 'form-control'}),  # noqa
+            'judge': forms.TextInput(attrs={'placeholder': ' Juiz',  'class': 'form-control'}),  # noqa
+            'value': forms.NumberInput(attrs={'placeholder': ' Valor',  'class': 'form-control'}),  # noqa
+            'organ': forms.TextInput(attrs={'placeholder': ' Orgão',  'class': 'form-control'}),  # noqa
+            'area': forms.TextInput(attrs={'placeholder': ' Área',  'class': 'form-control'}),  # noqa
+            'controll': forms.TextInput(attrs={'placeholder': ' Controller',  'class': 'form-control'}),  # noqa
         }
 
 

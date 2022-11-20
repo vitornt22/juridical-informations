@@ -1,0 +1,131 @@
+{% extends 'adm/baseAdmin.html' %}
+{% load crispy_forms_tags%}
+
+{%block addLink%}
+  
+{%endblock addLink%}
+
+
+
+{%block content%}
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+      <!-- general form elements -->
+      <div class="card card-lightblue">
+        <div class="card-header">
+          <h3 class="card-title">Cadastrar {{tag}}</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="POST" action={%url  'process:register'%} enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="card-body">
+              <div class="row">
+                <div class="col-lg-4 form-group">
+                    {{form.county|as_crispy_field}}
+                </div>
+                <div class="col-lg-4 form-group">
+                  {{form.class_project|as_crispy_field}}
+                </div>
+                <div class="col-lg-4 form-group">
+                  {{form.organ|as_crispy_field}}
+                </div>
+              </div>
+          
+            <div class="row">
+              <div class="col-lg-3 form-group">
+                {{form.area|as_crispy_field}}
+              </div>
+                <div class="col-lg-3 form-group">
+                  {{form.court|as_crispy_field}}
+                </div>
+                <div class="col-lg-3 form-group">
+              </div>
+                <div class="col-lg-3 form-group">
+                  {{form.controll|as_crispy_field}}
+                </div>
+            </div>
+            
+            <div class="row">
+              
+              <div class="col-lg-4 form-group">
+                <div class="input-group mb-3">
+                  <select id="empresas" class="form-control" name="empresas">
+                    {%for i in companies %}
+                      <option value={{i.id}}>{{i}}</option>
+                    {%endfor%}
+                  </select>                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Adicionar Réu</span>
+                  </div>
+                </div>           
+              </div>
+              <div class="col-lg-4 form-group">
+                <div class="input-group mb-3">
+                  <select id="empresas" class="form-control" name="empresas">
+                    {%for i in companies %}
+                      <option value={{i.id}}>{{i}}</option>
+                    {%endfor%}
+                  </select>                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Adicionar Juiz</span>
+                  </div>
+                </div>           
+              </div>
+              <div class="col-lg-4 form-group">
+                <div class="input-group mb-3">
+                  <select id="empresas" class="form-control" name="empresas">
+                    {%for i in companies %}
+                      <option value={{i.id}}>{{i}}</option>
+                    {%endfor%}
+                  </select>                  <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Adicionar Autor</span>
+                  </div>
+                </div>           
+              </div>
+          </div>
+  
+            <div class="row">
+                  <div class="col-lg-3 form-group">
+                   {{form.forum|as_crispy_field}}
+                  </div>
+                  <div class="col-lg-4 form-group">
+                    {{form.subject|as_crispy_field}}
+                  </div>
+                  <div class="col-lg-3 form-group">
+                    {{form.value|as_crispy_field}}
+                  </div> 
+                  <div class="col-lg-3 form-group">
+                    {{form.number|as_crispy_field}}
+                  </div>  
+            </div>
+          </div>
+          <!-- /.card-body -->
+          <div class="card-footer">
+            <button type="submit" class="btn bg-lightblue">Cadastrar</button>
+          </div>
+        </form>
+      </div>
+      <!-- /.card -->
+    </div>
+  </div>
+  
+{%endblock content%}
+
+{%block addScript%}
+<script>
+  {% for msg in messages%}
+  swal({
+    title: "{{msg}}",
+    text: "Deseja ver as informações do novo membro cadastrado?",
+    icon: "success",
+    buttons: ["Cadastrar Outro Fiel",'Ver Dados'],
+  }).then((willDelete) => {
+    if (willDelete) {
+        window.location="{%url 'process:detail' id %}";
+    } else {
+      window.location="{%url 'process:register' %}";
+    }
+  });
+  {%endfor%}
+</script>
+{%endblock addScript%}
