@@ -7,7 +7,7 @@ from judge.models import Judge
 class Process (models.Model):
     number = models.CharField(
         max_length=25, unique=True, null=True, blank=True)
-    class_project = models.CharField(max_length=50)
+    class_process = models.CharField(max_length=50)
     court = models.CharField(max_length=50)
     forum = models.CharField(max_length=50)
     subject = models.CharField(max_length=50)

@@ -1,9 +1,11 @@
 # flake8: noqa
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http.response import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.list import ListView
 
@@ -17,6 +19,10 @@ from process.forms import ProcessForm
 from process.models import Process
 
 
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
 class ProcessDetails(View):
 
     def addParts(self, process):
@@ -109,7 +115,10 @@ class ProcessDetails(View):
         return self.render_process(form, html, id, process)
 
 
-# dont forget add login required later
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
 class ProcessDelete(ProcessDetails):
 
     def get(self, request, id=None):
@@ -119,6 +128,10 @@ class ProcessDelete(ProcessDetails):
         return redirect('process:list')
 
 
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
 class DeleteProcessPart(ProcessDetails):
 
     def get(self, request, id=None, idPart=None):
@@ -134,6 +147,10 @@ class DeleteProcessPart(ProcessDetails):
         return redirect('process:detail', id)
 
 
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
 class ProcessList(ListView):
     model = Process
     context_object_name = 'processes'
@@ -147,7 +164,7 @@ class ProcessList(ListView):
             qs = qs.filter(Q(
                 Q(number__icontains=search) |
                 Q(court__icontains=search) | Q(forum__icontains=search) |
-                Q(judge__name__icontains=search) | Q(class_project__icontains=search) |
+                Q(judge__name__icontains=search) | Q(class_process__icontains=search) |
                 Q(subject__icontains=search) | Q(organ__icontains=search) |
                 Q(area__icontains=search) | Q(county__icontains=search)
 

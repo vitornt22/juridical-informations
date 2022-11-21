@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -15,7 +16,7 @@
     integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
   <!-- Estilo customizado -->
-  <link rel="stylesheet" type="text/css" href="css/estilo.css">
+  <link rel="stylesheet" type="text/css" href="{%static 'css/estilo.css' %}">
 
   <title> IJP - Informações Juridicas</title>
 </head>
@@ -27,7 +28,7 @@
       <div class="container">
 
         <a href="#" class="navbar-brand">
-          <img src="img/logo1.png" width="200">
+          <img src="{%static 'img/logo1.png' %}" width="200">
         </a>
 
         <button class="navbar-toggler" data-toggle="collapse" data-target="#nav-principal">
@@ -36,17 +37,15 @@
 
         <div class="collapse navbar-collapse" id="nav-principal">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item ">
+            <li class="active nav-item ">
               <a href="" class="nav-link ">Home</a>
             </li>
             <li class="nav-item">
-              <a href="" class="nav-link">Processos</a>
+              <a href="{%url 'process:searchProcess'  %}" class="nav-link">Processos</a>
             </li>
+            
             <li class="nav-item">
-              <a href="" class="nav-link">Partes</a>
-            </li>
-            <li class="nav-item">
-              <a href="" class="btn btn-outline-light ml-4">Entrar</a>
+              <a href="{%url 'process:loginPage' %}" class="btn btn-outline-light ml-4">Entrar</a>
             </li>
           </ul>
         </div>
@@ -72,7 +71,7 @@
 
             <div class="input-group input-group-lg">
               <div class="input-group-append">
-                <button type="button" class="btn btn-light">Pesquisar Processos</button>
+                <a href="{%url 'process:searchProcess'  %}"  style="color: #000; " type="button" class="btn btn-light">Pesquisar Processos</a>
 
               </div>
             </div>
@@ -81,7 +80,7 @@
 
         <!--/fim textos da seção -->
         <div class="col-md-6 d-none d-md-block">
-          <img class="" src="img/icons1.png" alt="Responseive image" width="500">
+          <img class="" src="{%static 'img/icons1.png' %}" alt="Responseive image" width="500">
         </div>
       </div>
     </div>

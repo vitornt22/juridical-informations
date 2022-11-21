@@ -1,9 +1,11 @@
 # flake8: noqa
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http.response import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.list import ListView
 
@@ -11,6 +13,10 @@ from .forms import PartForm
 from .models import Part
 
 
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
 class PartDetails(View):
 
     def render_part(self, form, html, id, idP):
@@ -79,7 +85,10 @@ class PartDetails(View):
         return self.render_part(form, html, id, idP)
 
 
-# dont forget add login required later
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
 class PartDelete(PartDetails):
 
     def get(self, request, id=None):
@@ -90,6 +99,10 @@ class PartDelete(PartDetails):
         return redirect('part:list')
 
 
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
 class PartList(ListView):
     model = Part
     context_object_name = 'parts'

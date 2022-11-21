@@ -34,8 +34,8 @@ class MovementDetails(View):
 
     def get(self, request, id=None, idProcess=None):
         print("diiiiidiidi", id)
-        html = 'adm/process/processRegister.html' if id is None else 'adm/movement/movementDetail.html'
-        movement = self.get_movement(id)
+        html = 'adm/process/processRegister.html' if id is None else 'adm/movement/processDetail.html'
+        movement = Movement.objects.filter(id=id).first()
 
         form = MovementForm(instance=movement or None)
         return self.render_movement(form, html, id)

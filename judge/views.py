@@ -1,10 +1,12 @@
 # Create your views here.
 # flake8: noqa
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http.response import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.list import ListView
 
@@ -12,6 +14,10 @@ from .forms import JudgeForm
 from .models import Judge
 
 
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
 class JudgeDetails(View):
 
     def render_judge(self, form, html, id, idP):
@@ -76,7 +82,10 @@ class JudgeDetails(View):
         return self.render_judge(form, html, id)
 
 
-# dont forget add login required later
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
 class JudgeDelete(JudgeDetails):
     def get(self, request, id=None):
         print("DELETEEE")
@@ -87,6 +96,10 @@ class JudgeDelete(JudgeDetails):
         return redirect('judge:list')
 
 
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
 class JudgeList(ListView):
     model = Judge
     context_object_name = 'judges'

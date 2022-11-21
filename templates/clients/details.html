@@ -1,284 +1,197 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends 'clients/baseHome.html' %}
+{% load static %}
 
-<head>
-  <!-- Meta tags Obrigatórias -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-    integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-
-  <!-- Estilo customizado -->
-  <link rel="stylesheet" type="text/css" href="css/estilo.css">
-
-  <title> IJP - Informações Juridicas</title>
-</head>
-
-<body id="">
-  <header>
-    <!-- inicio Cabecalho -->
-    <nav id="home" class="fixed-top navbar navbar-expand-sm navbar-light  ">
-      <div class="container">
-
-        <a href="#" class="navbar-brand">
-          <img src="img/logo1.png" width="200">
-        </a>
-
-        <button class="navbar-toggler" data-toggle="collapse" data-target="#nav-principal">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="nav-principal">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item ">
-              <a href="" class="nav-link ">Home</a>
-            </li>
-            <li class="nav-item">
-              <a href="" class="nav-link">Processos</a>
-            </li>
+{% block content %}
 
 
-            <li class="nav-item">
-              <a href="" class="btn btn-outline-light ml-4">Entrar</a>
-            </li>
-          </ul>
-        </div>
+<section class="fixed" id="">
+  <!-- Início seção home -->
+  <div id="printMe" class="container ">
+    <div style="margin-top: 100px;" class="row">
+      <!--start column-->
+      <div class="m-auto col-md-10 ">
+        <!-- Textos da seção -->
+        <div class="align-self-center">
+          <div class=" pt-5 mt-4 mb-4">
+            <h3><b>Processo Nº: {{process.number}}</b></h3>
+          </div>
+          <hr class="solid">
+          <div class=" row pt-5 mt-4 mb-4">
+            <!--start column1-->
 
-      </div>
-    </nav>
-  </header>
-  <!--/fim Cabecalho -->
-
-  <section class="fixed" id="">
-    <!-- Início seção home -->
-    <div class="container ">
-      <div style="margin-top: 100px;" class="row">
-        <!--start column-->
-        <div class="m-auto col-md-10 ">
-          <!-- Textos da seção -->
-          <div class="align-self-center">
-            <div class=" pt-5 mt-4 mb-4">
-              <h3><b>Processo Nº: 0002617-09.2020.8.26.0041</b></h3>
+            <div class=" col-md-12 pt-5 mt-4 mb-4">
+              <di class="row">
+                <div class="col-md-3">
+                  <h5><b>Classe</b></h5>
+                  <p>{{process.class_process}}</p>
+                </div>
+                <div class="col-md-3">
+                  <h5><b>Assunto</b></h5>
+                  <p>{{process.subject}}</p>
+                </div>
+                <div class="col-md-3">
+                  <h5><b>Foro</b>
+                    <h5>
+                      <p>{{process.forum}}</p>
+                </div>
+                <div class="col-md-3">
+                  <h5><b>Vara</b></h5>
+                  <p>{{process.court}}</p>
+                </div>
+              </di>
             </div>
-            <hr class="solid">
-            <div class=" row pt-5 mt-4 mb-4">
-              <!--start column1-->
+            <!--end column1-->
+            <!--start column2-->
+            <div class=" col-md-12 pt-5 mt-4 mb-4">
+              <di class="row">
 
-              <div class=" col-md-12 pt-5 mt-4 mb-4">
-                <di class="row">
-                  <div class="col-md-3">
-                    <h5><b>Classe</b></h5>
-                    <p>Fulana</p>
-                  </div>
-                  <div class="col-md-3">
-                    <h5><b>Assunto</b></h5>
-                    <p>Fulana</p>
-                  </div>
-                  <div class="col-md-3">
-                    <h5><b>Foro</b>
-                      <h5>
-                        <p>Fulana</p>
-                  </div>
-                  <div class="col-md-3">
-                    <h5><b>Vara</b></h5>
-                    <p>Fulana</p>
-                  </div>
-                </di>
-              </div>
-              <!--end column1-->
-              <!--start column2-->
-              <div class=" col-md-12 pt-5 mt-4 mb-4">
-                <di class="row">
-
-                  <div class="col-md-3">
-                    <h5><b>Orgão</b></h5>
-                    <p>Fulana</p>
-                  </div>
-                  <div class="col-md-3">
-                    <h5><b>Comarca</b></h5>
-                    <p>Fulana</p>
-                  </div>
-                  <div class="col-md-3">
-                    <h5><b>Juiz</b></h5>
-                    <p>Fulana</p>
-                  </div>
-                  <div class="col-md-3">
-                    <h5><b>Distribuição</b></h5>
-                    <p>Fulana</p>
-                  </div>
-                </di>
-              </div>
-              <!--end column2-->
-
+                <div class="col-md-3">
+                  <h5><b>Orgão</b></h5>
+                  <p>{{process.organ}}</p>
+                </div>
+                <div class="col-md-3">
+                  <h5><b>Comarca</b></h5>
+                  <p>{{process.county}}</p>
+                </div>
+                <div class="col-md-3">
+                  <h5><b>Juiz</b></h5>
+                  <p>{{process.judge.name}}</p>
+                </div>
+                <div class="col-md-3">
+                  <h5><b>Distribuição</b></h5>
+                  <p>{{process.distribution}}</p>
+                </div>
+              </di>
             </div>
+            <!--end column2-->
+
           </div>
         </div>
-        <!--end of the column-->
       </div>
-      <!--Parts -->
-      <div style="margin-top: 60px;" class="row">
-        <div class="col-md-10 m-auto">
-          <hr class="solid">
-          <h5><b>Partes do processo</b></h5>
-          <br>
-          <table class="table">
-
-            <tbody>
-              <tr>
-                <th scope="row">Autor</th>
-                <td>Mark</td>
-
-              </tr>
-              <tr>
-                <th scope="row">Réu</th>
-                <td>Jacob</td>
-
-              </tr>
-
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!--End parts-->
-
-      <!--Start Movimentation-->
-      <div style="margin-top: 60px;" class="row">
-        <div class="col-md-10 m-auto">
-          <hr class="solid">
-          <h5><b>Movimentações</b></h5>
-          <br>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Data</th>
-                <th scope="col">Movimento</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <th>1</th>
-                <td>Mark</td>
-              </tr>
-              <tr>
-                <th>2</th>
-                <td>Jacob</td>
-              </tr>
-
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <!--End Movimentation-->
-
-      <div style="margin-top: 60px;" class="row">
-        <div class="col-md-10 m-auto">
-          <hr class="solid">
-          <br>
-          <h5><b>INCIDENTES, AÇÕES INCIDENTAIS, RECURSOS E EXECUÇÕES DE SENTENÇAS</b></h5>
-          <p>Não há incidentes, ações incidentais, recursos ou execuções de sentenças vinculados a este processo.
-          </p>
-        </div>
-      </div>
-
-      <div style="margin-top: 40px;" class="row">
-        <div class="col-md-10 m-auto">
-          <hr class="solid">
-          <br>
-          <h5><b>APENSOS, ENTRANHADOS E UNIFICADOSS</b></h5>
-          <p>Não há processos apensados, entranhados e unificados a este processo.</p>
-        </div>
-      </div>
-
-      <div style="margin-top: 40px;" class="row">
-        <div class="col-md-10 m-auto">
-          <hr class="solid">
-          <br>
-          <h5><b>AUDIÊNCIAS</b></h5>
-          <p>Audiências não encontradas.</p>
-        </div>
-      </div>
-      <br><br>
-
-      <div style="margin-top: 40px;" class="row">
-        <div class="col-md-10 m-auto">
-          <hr class="solid">
-          <br>
-          <h5><b>Valor da Ação</b></h5>
-          <p>R$ 1200,00</p>
-        </div>
-      </div>
-      <br><br>
-
-      <div style="margin-top: 40px;" class="row ">
+      <!--end of the column-->
+    </div>
+    <!--Parts -->
+    <div style="margin-top: 60px;" class="row">
+      <div class="col-md-10 m-auto">
         <hr class="solid">
+        <h5><b>Partes do processo</b></h5>
+        <br>
+        <table class="table">
+          <tbody>
+            {% for i in process.parts.all  %}
+              <tr>
+                <th scope="row">{{i.category}}</th>
+                <td>{{i.name}}</td>
+              </tr>
+            {% endfor %}
+           
+            
 
-        <div class="col-md-1 m-auto">
-          <button class="btn btn-grey">Voltar</button>
-        </div>
-        <div class="col-md-1 m-auto">
-          <button class="btn navbar-color">Imprimir</button>
-        </div>
-        <div class="col-md-1 m-auto">
-          <button class="btn btn-success">Exportar csv</button>
-        </div>
+          </tbody>
+        </table>
       </div>
-      <br><br>
-
-
-      <!--/fim textos da seção -->
     </div>
-    </div>
-  </section>
+    <!--End parts-->
 
+    <!--Start Movimentation-->
+    <div style="margin-top: 60px;" class="row">
+      <div class="col-md-10 m-auto">
+        <hr class="solid">
+        <h5><b>Movimentações</b></h5>
+        <br>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Data</th>
+              <th scope="col">Movimento</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>1</th>
+              <td>Mark</td>
+            </tr>
+            <tr>
+              <th>2</th>
+              <td>Jacob</td>
+            </tr>
 
-
-  <footer class="fixed">
-    <div
-      class="d-flex flex-column flex-md-row text-center text-md-start justify-content-between py-4 px-4 px-xl-5 bg-primary">
-      <!-- Copyright -->
-      <div class="text-white mb-3 mb-md-0">
-        Copyright © 2020. All rights reserved.
+          </tbody>
+        </table>
       </div>
-      <!-- Copyright -->
-
-      <!-- Right -->
-      <div>
-        <a href="#!" class="text-white me-4">
-          <i class="fab fa-facebook-f"></i>
-        </a>
-        <a href="#!" class="text-white me-4">
-          <i class="fab fa-twitter"></i>
-        </a>
-        <a href="#!" class="text-white me-4">
-          <i class="fab fa-google"></i>
-        </a>
-        <a href="#!" class="text-white">
-          <i class="fab fa-linkedin-in"></i>
-        </a>
-      </div>
-      <!-- Right -->
     </div>
-  </footer>
+    <!--End Movimentation-->
 
-  <!--/fim seção home -->
+    <div style="margin-top: 60px;" class="row">
+      <div class="col-md-10 m-auto">
+        <hr class="solid">
+        <br>
+        <h5><b>INCIDENTES, AÇÕES INCIDENTAIS, RECURSOS E EXECUÇÕES DE SENTENÇAS</b></h5>
+        <p>Não há incidentes, ações incidentais, recursos ou execuções de sentenças vinculados a este processo.
+        </p>
+      </div>
+    </div>
 
-  <!-- JavaScript (Opcional) -->
-  <!-- jQuery primeiro, depois Popper.js, depois Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous"></script>
-</body>
+    <div style="margin-top: 40px;" class="row">
+      <div class="col-md-10 m-auto">
+        <hr class="solid">
+        <br>
+        <h5><b>APENSOS, ENTRANHADOS E UNIFICADOSS</b></h5>
+        <p>Não há processos apensados, entranhados e unificados a este processo.</p>
+      </div>
+    </div>
 
-</html>
+    <div style="margin-top: 40px;" class="row">
+      <div class="col-md-10 m-auto">
+        <hr class="solid">
+        <br>
+        <h5><b>AUDIÊNCIAS</b></h5>
+        <p>Audiências não encontradas.</p>
+      </div>
+    </div>
+    <br><br>
+
+    <div style="margin-top: 40px;" class="row">
+      <div class="col-md-10 m-auto">
+        <hr class="solid">
+        <br>
+        <h5><b>Valor da Ação</b></h5>
+        <p>R$ {{process.value}}</p>
+      </div>
+    </div>
+    <br><br>
+
+    <div style="margin-top: 40px;" class="row ">
+      <hr class="solid">
+
+      <div class="col-md-1 m-auto">
+        <a href="{%url 'process:searchProcess' %}" class="btn btn-grey">Voltar</a>
+      </div>
+      <div class="col-md-1 m-auto">
+        <button onclick="printDiv('printMe')"  class="btn navbar-color">Imprimir</button>
+      </div>
+      <div class="col-md-1 m-auto">
+        <button class="btn btn-success">Exportar csv</button>
+      </div>
+    </div>
+    <br><br>
+
+
+    <!--/fim textos da seção -->
+  </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% block addScript %}
+<script>
+  function printDiv(divName){
+    var printContents = document.getElementById(divName).innerHTML;
+    var originalContents = document.body.innerHTML;
+    document.body.innerHTML = printContents;
+    window.print();
+    document.body.innerHTML = originalContents;
+  }
+</script>
+{% endblock addScript %}
+

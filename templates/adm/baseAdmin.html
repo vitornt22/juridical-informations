@@ -64,7 +64,7 @@
         <ul class="navbar-nav ms-auto d-flex flex-row">
           <!-- Notification dropdown -->
           <li class="nav-item me-3 me-lg-0">
-            <a class="nav-link" href="#">
+            <a type='button'  class="areSure nav-link" href="#">
               <p>Sair</p>
             </a>
           </li>
@@ -106,12 +106,27 @@
   <script src="{%static 'js/virtual-select.min.js' %}"></script>
   <script>
     var ob = document.getElementById("{{active}}");
-    ob.classList.add("active");
+    ob.classList.add("actived");
   </script>
   <script type="text/javascript">
     $(document).ready(function(){
         $('#selectDiv').multiselect();
     });
+
+    $(document).on('click', '.areSure', function(e){
+      return Swal.fire({
+        title: 'Deseja Realmente Sair',
+        showCancelButton: true,
+        confirmButtonText: 'Sim',
+        time:5000,
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          window.location="{%url 'process:logout' %}"
+        } else if (result.isDenied) {
+        }
+      });
+    }); 
   </script>
   
   {% block addScript %}
