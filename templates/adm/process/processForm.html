@@ -1,0 +1,61 @@
+{% load crispy_forms_tags%}
+
+<div class="row">
+  <div class="col-lg-4 form-group">
+      {{form.county|as_crispy_field}}
+  </div>
+  <div class="col-lg-4 form-group">
+    {{form.class_project|as_crispy_field}}
+  </div>
+  <div class="col-lg-4 form-group">
+    {{form.organ|as_crispy_field}}
+  </div>
+</div>
+
+<div class="row">
+<div class="col-lg-4 form-group">
+  {{form.area|as_crispy_field}}
+</div>
+  <div class="col-lg-4 form-group">
+    {{form.court|as_crispy_field}}
+  </div>
+  <div class="col-lg-4 form-group">
+    {{form.controll|as_crispy_field}}
+  </div>
+ 
+</div>
+
+
+<div class="row">
+    <div class="col-lg-3 form-group">
+     {{form.forum|as_crispy_field}}
+    </div>
+    <div class="col-lg-3 form-group">
+      {{form.subject|as_crispy_field}}
+    </div>
+    <div class="col-lg-3 form-group">
+      {{form.value|as_crispy_field}}
+    </div> 
+    <div class="col-lg-3 form-group">
+      {{form.number|as_crispy_field}}
+
+    </div>  
+</div>
+<div class="row">
+  <div class="col-lg-6 form-group">
+   {{form.judge|as_crispy_field}}     
+  </div>
+    <div class="col-lg-6 form-group">
+      <label>Selecionar Partes</label>
+  
+      <select id="multipleSelect" name="parts" class="" multiple name="native-select" placeholder="Selecionar Partes" data-search="true" data-silent-initial-value-set="true">
+        {%for i in parts %}
+            <option value={{i.id}}>{{i}}</option>
+          {%endfor%}
+      </select>                      
+    </div>
+  </div>
+
+  {% if id != None %}
+  
+  {% endif %}

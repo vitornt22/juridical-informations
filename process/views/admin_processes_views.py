@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic.list import ListView
 
+from judge.forms import JudgeForm
+from judge.models import Judge
 from parts.forms import PartForm
 from parts.models import Part
 from process.forms import ProcessForm
@@ -14,19 +16,45 @@ from process.models import Process
 
 class ProcessDetails(View):
 
-    def render_process(self, form, html, id=None):
+    def addParts(self, process):
+        parts = self.request.POST.getlist('parts')
+        print("LEN", len(parts))
+        judge = self.request.POST.get('judge')
+        if len(judge) > 0:
+            process.judge = Judge.objects.get(id=judge)
+        process.save()
+        if parts[0] != '':
+            parts = parts[0].split(',')
+
+            print("OPSSSS", parts)
+
+            for i in parts:
+                if i != "'":
+                    part = Part.objects.filter(id=int(i)).first()
+                    print("part "+str(i)+" " + str(part))
+                    process.parts.add(part)
+        print("mY PARTSSSSSSSSSS", process.parts.all())
+        process.save()
+
+    def render_process(self, form, html, id, process):
         partForm = PartForm()
-        jugdes = Part.objects.filter(category="Juiz")
-        authors = Part.objects.filter(category="Autor")
-        defendants = Part.objects.filter(category="Réu")
+        judgeForm = JudgeForm()
+        judgeSelect = Process.objects.filter(id=id).first()
+        judges = Judge.objects.all()
+        p = Part.objects.all()
+        path = 'processo' if id is None else 'editar'+str(id)
+        myParts = None if process is None else process.parts.all()
+
+        parts = p.difference(myParts)
+        print("DIFFERENCE", parts)
         print('entra aqui')
         return render(
             self.request,
             html, context={
-                'form': form,
+                'form': form, 'parts': parts, 'judges': judges,
                 'active': 1, 'tag': 'Projeto', 'back': 'process:list',
-                'partForm': partForm, 'judges': jugdes, 'authors': authors,
-                'defendants': defendants, 'id': id,
+                'partForm': partForm, 'id': id, 'judgeForm': judgeForm,
+                'path': path, 'judgeSelect': judgeSelect, 'myParts': myParts,
             })
 
     def get_process(self, id=None):
@@ -44,59 +72,69 @@ class ProcessDetails(View):
         return process
 
     def get(self, request, id=None):
-        print('here')
-
         process = self.get_process(id)
-        print("GET MY PROJECT", process)
         form = ProcessForm(instance=process)
-        html = 'adm/processRegister.html' if id is None else 'adm/processDetail.html'
-        print(html)
-        return self.render_process(form, html, id)
+        html = 'adm/process/processRegister.html' if id is None else 'adm/process/processDetail.html'
+        return self.render_process(form, html, id, process)
 
     def post(self, request, id=None):
         process = self.get_process(id)
-        print('entrando POST')
-        print("my request", request.POST.get(
-            'register'))
         form = ProcessForm(request.POST or None,
                            instance=process)
-        judge = request.POST.get('judge')
-        print("MY JUIZ", judge)
 
         if form.is_valid():
             # now form is valid and i can to save it
-            p = form.save(commit=False)
+            process = form.save(commit=False)
             # now i can make changes in object edited
-            p.save()
+
+            self.addParts(process)
+
+            process.save()
 
             if id is not None:
                 messages.success(request, 'Processo Editado  com sucesso!')
-                return redirect(reverse('process:detail', id))
+                return redirect('process:detail', id)
             else:
-                messages.success(request, 'Processo Cadastrado com sucesso!')
-                return redirect(reverse('process:register'))
+                messages.success(
+                    request, 'Processo Cadastrado com sucesso!')
+                return redirect('process:register')
         else:
             print('no')
 
-        html = 'adm/processRegister.html' if id is None else 'adm/processDetail.html'
+        html = 'adm/process/processRegister.html' if id is None else 'adm/process/processDetail.html'
 
-        return self.render_process(form, html, id)
+        return self.render_process(form, html, id, process)
 
 
 # dont forget add login required later
 class ProcessDelete(ProcessDetails):
-    def post(self, request, id=None):
-        process = self.get_process(self.request.POST.ger('id'))
+    def get(self, request, id=None):
+        process = self.get_process(id)
         process.delete()
         messages.success(self.request, 'Deletado com sucesso')
-        return redirect()
+        return redirect('process:list')
+
+
+class DeleteProcessPart(ProcessDetails):
+
+    def get(self, request, id=None, idPart=None):
+        print("OOAOOOAOAOO")
+        process = Process.objects.filter(id=id).first()
+        print("parts", process)
+        if process != None:
+            print("ola")
+            part = process.parts.get(id=idPart)
+            process.parts.remove(part)
+            messages.success(
+                self.request, 'Parte desligada com sucesso com sucesso')
+        return redirect('process:detail', id)
 
 
 class ProcessList(ListView):
     model = Process
     context_object_name = 'processes'
     ordering = ['-distribution']
-    template_name = 'adm/processList.html'
+    template_name = 'adm/process/processList.html'
 
     def get_queryset(self, *args, **kwargs):
         # search= self.request.query_param.get

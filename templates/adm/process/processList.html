@@ -48,3 +48,15 @@
     </tbody>
   </table>
 {% endblock %}
+
+{% block addScript %}
+<script>
+  {% for msg in messages%}
+  Swal.fire({
+    icon: 'success',
+    title: '{{msg}}',
+  })
+  {%endfor%}
+</script>
+{% endblock addScript %}
+

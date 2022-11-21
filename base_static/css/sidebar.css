@@ -7,6 +7,16 @@ body {
   }
 }
 
+#multipleSelect{
+	max-width: 100%;
+}
+
+
+.the-table {
+  table-layout: fixed;
+  word-break: break-word;
+}
+
 .bg-green{
   color: #FFF;
   background-color: #10d669;

@@ -1,0 +1,161 @@
+{% extends 'adm/baseAdmin.html' %}
+{% load crispy_forms_tags%}
+
+{%block addLink%}
+  
+{%endblock addLink%}
+
+
+
+{%block content%}
+<div class="  row">
+    <!-- left column -->
+    <div  class=" col-md-7">
+      <!-- general form elements -->
+      <div class=" card card-lightblue">
+        <div class="card-header">
+          <h3 class="card-title">Salvar Alterações</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="POST" action="{%url  'process:detail' id %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="card-body">
+              {% include 'adm/process/processForm.html' %}
+          </div>
+          <!-- /.card-body -->
+          <div class="card-footer">
+            <a href="{%url 'process:list' %}" type="button" class="btn ">Voltar</a>
+
+            <button style="color:#FFF;" type="submit" class="btn bg-primary">Editar</button>
+             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
+              Inserir Nova Parte
+            </button>
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter2">
+               Adicionar Juiz
+            </button>
+            <a type="button" href="{%url 'process:delete' id %}" style="color:#FFF;" class="areSure btn btn-danger" >
+              Remover Processo
+            </a>
+          </div>
+        </form>
+      </div>
+
+      {% include 'adm/parts/part_modal.html' %}
+      {% include 'adm/judge/judge_modal.html' %}
+
+      <!-- /.card -->
+    </div>
+    <div  class="col-md-5">
+      <div  style="min-height:32rem; max-height:60rem;" class="card card-lightblue">
+        <div class="card-header">
+          <h3 class="card-title">Movimentações</h3>
+        </div>
+        <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Data</th>
+              <th scope="col">Ação</th>
+              <th scope="col">Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="">
+              <th scope="row"></th>
+              <td>20/02/2022</td>
+              <td style="word-break: break-word;">skddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsssssssssssssssssssssssssssssssssssssssssssssss
+                sssssssssssssssssssssssddddddddddddddddddddddddddddddddddddddddddddddddddsssssssssssssss</td>
+                <td><button class="btn btn-primary">Editar</td>
+
+            </tr>
+           
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer">
+
+        <button style="color:#FFF;" type="submit" class="btn bg-success">Adicionar mocvimentação</button>
+      </div>
+      </div>
+    </div>
+   
+  </div>
+  <div class="row">
+    <div  class="col-md-7">
+    </div>
+
+    <div  class="col-md-5">
+      <div  style="min-height:32rem; max-height:60rem;" class="card card-lightblue">
+        <div class="card-header">
+          <h3 class="card-title">Partes</h3>
+        </div>
+        <div class="card-body">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Nome</th>
+              <th scope="col">Categoria</th>
+              <th scope="col">CPF</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in myParts  %}
+            <tr class="">
+              <th scope="row"></th>
+              <td>{{i.name}}</td>
+              <td style="word-break: break-word;">{{i.category}}</td>
+              <td style="word-break: break-word;">{{i.cpf}}</td>
+              <td><a href="{%url 'part:detailPartProcess' i.id id%}" style="color:#FFF;" class="btn btn-primary">Editar</a></td>
+              <td><a href="{%url 'process:shutdown' id i.id %}" style="color:#FFF;" class="btn btn-danger">Remover</td>
+
+
+            </tr>
+            {% endfor %}
+            
+           
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer">
+
+      </div>
+      </div>
+    </div>
+  </div>
+  
+{%endblock content%}
+
+{%block addScript%}
+
+<script type="text/javascript">
+  VirtualSelect.init({
+    ele: '#multipleSelect',
+    multiple: true
+
+  });
+</script>
+<script type="text/javascript">
+
+  $(document).on('click', '.areSure', function(e){
+    return confirm("Tem certeza que quer deletar ?")
+  }); 
+  $(document).ready(function(){
+      $('#selectDiv').multiselect();
+  });
+</script>
+
+<script>
+  {% for msg in messages%}
+  Swal.fire({
+    icon: 'success',
+    title: '{{msg}}',
+  })
+  {%endfor%}
+</script>
+{%endblock addScript%}

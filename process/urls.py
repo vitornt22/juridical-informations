@@ -11,5 +11,9 @@ urlpatterns = [
     path('', views.ProcessList.as_view(), name='list'),
     path('processo/', views.ProcessDetails.as_view(), name='register'),
     path('processo/<int:id>/', views.ProcessDetails.as_view(), name='detail'),
-    path('a/<int:id>/', views.ProcessDelete.as_view(), name='delete')
+    path('deletarProcesso/<int:id>/',
+         views.ProcessDelete.as_view(), name='delete'),
+    path('desligarParte/<int:id>/<int:idPart>',
+         views.DeleteProcessPart.as_view(), name='shutdown')
+
 ]

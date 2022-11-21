@@ -3,8 +3,6 @@
 {% load crispy_forms_tags%}
 
 
-
-
 {%block content%}
 <div class="row">
     <!-- left column -->
@@ -14,12 +12,12 @@
         <div class="card-header">
           <h3 class="card-title">Cadastrar Processo</h3>
         </div>
-        <!-- /.card-header -->S
+        <!-- /.card-header -->
         <!-- form start -->
         <form method="POST" action="{%url  'process:register'%}" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="card-body">
-              {% include 'adm/processForm.html' %}
+              {% include 'adm/process/processForm.html' %}
           </div>
           <!-- /.card-body -->
           <div class="card-footer">
@@ -28,6 +26,9 @@
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
               Inserir Nova Parte
             </button>
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter2">
+               Adicionar Juiz
+            </button>
           </div>
         </form>
       </div>
@@ -35,11 +36,20 @@
     </div>
   </div>
 
-  {% include 'adm/part_modal.html' %}
+  {% include 'adm/parts/part_modal.html' %}
+  {% include 'adm/judge/judge_modal.html' %}
   
 {%endblock content%}
 
 {%block addScript%}
+<script type="text/javascript">
+  VirtualSelect.init({
+    ele: '#multipleSelect',
+    multiple: true
+
+  });
+</script>
+
 <script>
   {% for msg in messages%}
   Swal.fire({

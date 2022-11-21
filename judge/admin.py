@@ -1,0 +1,9 @@
+from django.contrib import admin
+
+from .models import Judge
+
+
+# Register your models here.
+@admin.register(Judge)
+class JudgeAdmin(admin.ModelAdmin):
+    ...

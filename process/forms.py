@@ -40,5 +40,8 @@ class ProcessForm(forms.ModelForm):
                'value': forms.NumberInput(attrs={'placeholder': ' Valor',  'class': 'form-control'}),  # noqa
                'organ': forms.TextInput(attrs={'placeholder': ' Orgão',  'class': 'form-control'}),  # noqa
                'area': forms.TextInput(attrs={'placeholder': ' Área',  'class': 'form-control'}),  # noqa
-               'controll': forms.TextInput(attrs={'placeholder': ' Controller',  'class': 'form-control'}),  # noqa
+               'controll': forms.TextInput(attrs={'class': 'form-control'}),  # noqa
+                'judge': forms.Select(attrs={'placeholder': ' Juiz',   'id': "multipleSelect", 'name': "judge", 'class': "",  'multiple': 'false', 'name': "native-select",
+                'placeholder': "Selecionar Partes", 'data-search': "true",  "data-silent-initial-value-set": "true"}),  # noqa
+
            }

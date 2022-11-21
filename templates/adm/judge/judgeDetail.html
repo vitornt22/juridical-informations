@@ -1,33 +1,30 @@
 {% extends 'adm/baseAdmin.html' %}
 {% load crispy_forms_tags%}
 
-{%block addLink%}
-  
-{%endblock addLink%}
-
 
 
 {%block content%}
 <div class="row">
     <!-- left column -->
-    <div class="col-md-12">
+    <div class="m-auto col-md-5">
       <!-- general form elements -->
       <div class="card card-lightblue">
         <div class="card-header">
-          <h3 class="card-title">Editar Dados do Processo</h3>
+          <h3 class="card-title"> Editar Juiz</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form method="POST" action="{%url  'process:detail' id %}" enctype="multipart/form-data">
+        <form method="POST" action="{%url 'judge:detail' id %}" enctype="multipart/form-data">
           {% csrf_token %}
-          <div class="card-body">
-              {% include 'adm/processForm.html' %}
-          </div>
-          <!-- /.card-body -->
-          <div class="card-footer">
-            <a href="{%url 'process:list' %}" type="button" class="btn ">Voltar</a>
 
-            <button style="color:#FFF;" type="submit" class="btn bg-primary">Editar</button>
+          <div class="card-body">
+
+          {{form}}
+          </div>
+          <div class="card-footer">
+            <a href="{%url 'judge:list' %}" type="button" class="btn bg-lightblue">Voltar</a>
+            
+            <button type="submit" value="r" name="register" class="btn btn-primary">Cadastrar</button>
           </div>
         </form>
       </div>
@@ -40,10 +37,12 @@
 {%block addScript%}
 <script>
   {% for msg in messages%}
-  Swal.fire(
-    '{{msg}}',
-    'success'
-  )
+  Swal.fire({
+    icon: 'success',
+    title: '{{msg}}',
+  })
   {%endfor%}
+
+ 
 </script>
 {%endblock addScript%}
