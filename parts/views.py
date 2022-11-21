@@ -1,5 +1,6 @@
 # flake8: noqa
 from django.contrib import messages
+from django.db.models import Q
 from django.http.response import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -19,10 +20,11 @@ class PartDetails(View):
         if 'editarParte/process' in self.request.path:
             path = 'process:detail'
             active = 1
-        return render(self.request, html, context={'form': form,
-                                                   'active': active, 'tag': 'Projeto',
-                                                   'back': 'part:list',
-                                                   'id': id, 'idP': idP, 'path': path})
+        context = {'form': form,
+                   'active': active, 'tag': 'Projeto',
+                   'back': 'part:list',
+                   'id': id, 'idP': idP, 'path': path}
+        return render(self.request, html, context)
 
     def get_part(self, id=None):
         part = None
@@ -61,7 +63,7 @@ class PartDetails(View):
             else:
                 messages.success(
                     request, 'Parte Cadastrada com sucesso!')
-
+        print("TESTS ID", id)
         if id is None:
             if path == 'processo':
                 return redirect('process:register')
@@ -95,12 +97,20 @@ class PartList(ListView):
     template_name = 'adm/parts/partsList.html'
 
     def get_queryset(self, *args, **kwargs):
-        # search= self.request.query_param.get
+        search = self.request.GET.get('search')
         qs = super().get_queryset(*args, **kwargs)
+        if search:
+            qs = qs.filter(Q(
+                Q(name__icontains=search) |
+                Q(category__icontains=search) |
+                Q(cpf__icontains=search)
+            ))
 
         return qs
 
     def get_context_data(self, *args, **kwargs):
+        partForm = PartForm()
         ctx = super().get_context_data(*args, **kwargs)
-        ctx.update({"active": 2, 'tag': 'Parto'})
+        ctx.update({"active": 2, 'tag': 'Parto',
+                   'path': 'list', 'partForm': partForm})
         return ctx

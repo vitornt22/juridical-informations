@@ -43,6 +43,8 @@
 
       {% include 'adm/parts/part_modal.html' %}
       {% include 'adm/judge/judge_modal.html' %}
+      {% include 'adm/movement/movement_modal.html' %}
+
 
       <!-- /.card -->
     </div>
@@ -55,28 +57,32 @@
         <table class="table">
           <thead>
             <tr>
-              <th scope="col"></th>
               <th scope="col">Data</th>
-              <th scope="col">Ação</th>
-              <th scope="col">Ação</th>
+              <th scope="col">Descrição</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+
             </tr>
           </thead>
           <tbody>
+            {% for i in movements  %}
             <tr class="">
-              <th scope="row"></th>
-              <td>20/02/2022</td>
-              <td style="word-break: break-word;">skddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddsssssssssssssssssssssssssssssssssssssssssssssss
-                sssssssssssssssssssssssddddddddddddddddddddddddddddddddddddddddddddddddddsssssssssssssss</td>
-                <td><button class="btn btn-primary">Editar</td>
+              <td>{{i.date}}/td>
+              <td style="word-break: break-word;">i.description</td>
+              <td><button class="btn btn-primary">Editar</td>
+                <td><button class="btn btn-danger">Remover</td>
 
             </tr>
+            {% endfor %}
            
           </tbody>
         </table>
       </div>
       <div class="card-footer">
 
-        <button style="color:#FFF;" type="submit" class="btn bg-success">Adicionar mocvimentação</button>
+        <button style="color:#FFF;" type="submit" class="btn bg-success" data-toggle="modal" data-target="#movementModal" 
+        >Adicionar Movimentação
+      </button>
       </div>
       </div>
     </div>

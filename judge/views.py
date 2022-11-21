@@ -1,6 +1,7 @@
 # Create your views here.
 # flake8: noqa
 from django.contrib import messages
+from django.db.models import Q
 from django.http.response import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -13,7 +14,7 @@ from .models import Judge
 
 class JudgeDetails(View):
 
-    def render_judge(self, form, html, id):
+    def render_judge(self, form, html, id, idP):
         print('entra aqui')
         return render(self.request, html, context={'form': form,
                                                    'active': 3, 'tag': 'Projeto',
@@ -29,7 +30,6 @@ class JudgeDetails(View):
 
             if not judge:
                 raise Http404()
-        print("MYY PARTTTTTT")
         return judge
 
     def get(self, request, id=None):
@@ -53,30 +53,37 @@ class JudgeDetails(View):
             p.save()
             if id is not None:
                 messages.success(
-                    request, 'Judgee  Editada  com sucesso!')
+                    request, 'Juiz  Editado  com sucesso!')
             else:
                 messages.success(
-                    request, 'Judgee Cadastrada com sucesso!')
+                    request, 'Juiz Cadastrado com sucesso!')
         else:
             print('no')
 
-        if id is not None:
-            html = 'adm/judge/judgeDetail.html'
-        else:
-            return redirect('process:register')
+        if id is None:
+            if path == 'processo':
+                return redirect('process:register')
+            elif 'editar' in path:
+                idProcess = int(path.replace('editar', ''))
+                print('myInt', idProcess)
+                return redirect('process:detail', idProcess)
+            else:
+                return redirect('part:list')
+
+        print('chegando ate aqui')
+        html = 'adm/judge/judgeDetail.html'
 
         return self.render_judge(form, html, id)
 
 
 # dont forget add login required later
 class JudgeDelete(JudgeDetails):
-
     def get(self, request, id=None):
-        print("JUDGDGSGG")
-        judge = self.get_judge(id)
-        name = judge.category+': ' + judge.name
+        print("DELETEEE")
+        judge = Judge.objects.filter(id=id).first()
+        name = judge.name
         judge.delete()
-        messages.success(self.request, 'Deletado com sucesso')
+        messages.success(self.request, name+'(a) Deletado com sucesso')
         return redirect('judge:list')
 
 
@@ -87,12 +94,19 @@ class JudgeList(ListView):
     template_name = 'adm/judge/judgesList.html'
 
     def get_queryset(self, *args, **kwargs):
-        # search= self.request.query_param.get
+        print('HELLO')
+        search = self.request.GET.get('search')
+        print(search)
         qs = super().get_queryset(*args, **kwargs)
-
+        if search is not None:
+            print('akoosjdojo')
+            qs = qs.filter(Q(Q(name__icontains=search)
+                           | Q(cnj__icontains=search)))
         return qs
 
     def get_context_data(self, *args, **kwargs):
+        judgeForm = JudgeForm()
         ctx = super().get_context_data(*args, **kwargs)
-        ctx.update({"active": 3, 'tag': 'Juiz'})
+        ctx.update({"active": 3, 'tag': 'Juiz',
+                   'judgeForm': judgeForm, 'path': 'list'})
         return ctx

@@ -1,17 +1,15 @@
 {% extends 'adm/baseAdmin.html' %}
 
 {% block searchInput %}
-<form class="d-none d-md-flex input-group w-auto my-auto">
-  <input name="search" autocomplete="off" type="search" class="form-control rounded"
+<form method="GET"  action="?" class="d-none d-md-flex input-group w-auto my-auto">
+  <input name="search" autocomplete="off"   value={{request.GET.search}} type="search" class="form-control rounded"
     placeholder='Pesquisar Processos' style="min-width: 10px; width:60vh;" />
-  <span class="input-group-text border-0"><i class="fas fa-search"></i></span>
+  <button  type="submit" class="input-group-text border-0"> <i class="fas fa-search"></i></button>
 </form>
 {% endblock searchInput %}
 
 {%block button%}
-<form method="GET" class="d-none d-md-flex input-group w-auto my-auto">
-  <a href="#" type="button" class="btn input-group-text border-0">Cadastrar Juiz</a>
-</form>
+  <button data-toggle="modal" data-target="#exampleModalCenter2" href="#" type="button" class="btn input-group-text border-0">Cadastrar Juiz</button>
 {% endblock %}
 
 {%block content%}
@@ -27,7 +25,7 @@
       
       <tr>
         <td>{{i.name}}</td>
-        <td>{{i.cpf}}</td>
+        <td>{{i.cnj}}</td>
         <td><a href="{% url 'judge:detail' i.id %}" style="color: #FFF;"  class='btn btn-primary'>Editar</a></td>
         <td><a href="{% url 'judge:delete' i.id %}" style="color: #FFF;" type="submit" class='areSure btn btn-danger'>Remover</a></td>
 
@@ -37,6 +35,8 @@
 
     </tbody>
   </table>
+
+  {% include 'adm/judge/judge_modal.html' %}
 {% endblock %}
 
 {%block addScript%}

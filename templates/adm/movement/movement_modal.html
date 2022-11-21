@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div  class="modal fade" id="exampleModalCenter2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div  class="modal fade" id="movementModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -8,10 +8,10 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form method="POST" action="{%url 'judge:register' path %}">
+        <form method="POST" action="{%url 'movement:register' id %}">
         {% csrf_token %}
         <div class="modal-body">
-            {{judgeForm}}
+            {{movementForm}}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>

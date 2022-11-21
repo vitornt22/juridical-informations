@@ -1,16 +1,16 @@
 {% extends 'adm/baseAdmin.html' %}
 
 {% block searchInput %}
-<form class="d-none d-md-flex input-group w-auto my-auto">
+<form method="GET" class="d-none d-md-flex input-group w-auto my-auto">
   <input name="search" autocomplete="off" type="search" class="form-control rounded"
     placeholder='Pesquisar Processos' style="min-width: 10px; width:60vh;" />
-  <span class="input-group-text border-0"><i class="fas fa-search"></i></span>
+  <button type="submit" class="input-group-text border-0"><i class="fas fa-search"></i></button>
 </form>
 {% endblock searchInput %}
 
 {%block button%}
 <form method="GET" class="d-none d-md-flex input-group w-auto my-auto">
-  <a href="#" type="button" class="btn input-group-text border-0">Cadastrar Parte</a>
+  <button data-toggle="modal" data-target="#exampleModalCenter"  type="button" class="btn input-group-text border-0">Cadastrar Parte</button>
 </form>
 {% endblock %}
 
@@ -39,6 +39,7 @@
 
     </tbody>
   </table>
+  {% include 'adm/parts/part_modal.html' %}
 {% endblock %}
 
 {%block addScript%}

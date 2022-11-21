@@ -1,5 +1,6 @@
 # flake8: noqa
 from django.contrib import messages
+from django.db.models import Q
 from django.http.response import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -8,6 +9,8 @@ from django.views.generic.list import ListView
 
 from judge.forms import JudgeForm
 from judge.models import Judge
+from movement.forms import MovementForm
+from movement.models import Movement
 from parts.forms import PartForm
 from parts.models import Part
 from process.forms import ProcessForm
@@ -37,6 +40,8 @@ class ProcessDetails(View):
         process.save()
 
     def render_process(self, form, html, id, process):
+        movements = Movement.objects.filter(process=process)
+        movementForm = MovementForm()
         partForm = PartForm()
         judgeForm = JudgeForm()
         judgeSelect = Process.objects.filter(id=id).first()
@@ -44,10 +49,7 @@ class ProcessDetails(View):
         p = Part.objects.all()
         path = 'processo' if id is None else 'editar'+str(id)
         myParts = None if process is None else process.parts.all()
-
-        parts = p.difference(myParts)
-        print("DIFFERENCE", parts)
-        print('entra aqui')
+        parts = p if myParts is None else p.difference(myParts)
         return render(
             self.request,
             html, context={
@@ -55,6 +57,7 @@ class ProcessDetails(View):
                 'active': 1, 'tag': 'Projeto', 'back': 'process:list',
                 'partForm': partForm, 'id': id, 'judgeForm': judgeForm,
                 'path': path, 'judgeSelect': judgeSelect, 'myParts': myParts,
+                'movements': movements, 'movementForm': movementForm
             })
 
     def get_process(self, id=None):
@@ -108,6 +111,7 @@ class ProcessDetails(View):
 
 # dont forget add login required later
 class ProcessDelete(ProcessDetails):
+
     def get(self, request, id=None):
         process = self.get_process(id)
         process.delete()
@@ -137,12 +141,21 @@ class ProcessList(ListView):
     template_name = 'adm/process/processList.html'
 
     def get_queryset(self, *args, **kwargs):
-        # search= self.request.query_param.get
+        search = self.request.GET.get('search')
         qs = super().get_queryset(*args, **kwargs)
+        if search:
+            qs = qs.filter(Q(
+                Q(number__icontains=search) |
+                Q(court__icontains=search) | Q(forum__icontains=search) |
+                Q(judge__name__icontains=search) | Q(class_project__icontains=search) |
+                Q(subject__icontains=search) | Q(organ__icontains=search) |
+                Q(area__icontains=search) | Q(county__icontains=search)
+
+            ))
 
         return qs
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        ctx.update({"active": 1, 'tag': 'Processo'})
+        ctx.update({"active": 1, 'tag': 'Processo', })
         return ctx
