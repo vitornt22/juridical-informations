@@ -6,7 +6,7 @@ from . import views
 
 app_name = 'movement'
 urlpatterns = [
-    path('registrarMovimentacao/<int:id>/',
+    path('registrarMovimentacao/<int:idProcess>/',
          views.MovementDetails.as_view(), name='register'),
     path('editar/Movimentacao/<int:idProcess>/<int:id>/',
          views.MovementDetails.as_view(), name='detail'),

@@ -28,6 +28,11 @@
 <article>
   <div style="margin-top: 100px;" class="row">
 
+    {%if processes|length == 0 %}
+      <h5 class="m-auto " style="color: red;">Não há processos</h5>
+      
+    
+    {%else%}
     {% for i in processes  %}
     <div class="m-auto col-md-10 ">
       <!-- Textos da seção -->
@@ -59,13 +64,26 @@
 
     </div>
     {% endfor %}
+    {%endif%}
   
   </div>
 </article>
 
-
-
 {% endblock content %}
+
+{% block addScript %}
+<script>
+var obj = document.getElementById("footer");
+{% if processes|length < 2 %}
+obj.classList.remove("fixed");
+obj.classList.add("fixed-bottom");
+{%else%}
+obj.classList.remove("fixed-bottom");
+obj.classList.add("fixed");
+{% endif %}
+</script>
+
+{% endblock addScript %}
 
 
 

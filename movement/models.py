@@ -7,7 +7,8 @@ from process.models import Process
 class Movement(models.Model):
     date = models.DateField()
     description = models.CharField(max_length=500)
-    process = models.ForeignKey(Process, on_delete=models.CASCADE, null=True)
+    process = models.ForeignKey(
+        Process, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self) -> str:
         return str(self.id) + " - " + self.process.number

@@ -25,26 +25,30 @@ from process.models import Process
 )
 class ProcessDetails(View):
 
+    # this method add all selected parts to  process
     def addParts(self, process):
         parts = self.request.POST.getlist('parts')
-        print("LEN", len(parts))
         judge = self.request.POST.get('judge')
+
+        # set select judge to process and save it
         if len(judge) > 0:
             process.judge = Judge.objects.get(id=judge)
         process.save()
+
+        # check if list of parts is not None to add in process
         if parts[0] != '':
             parts = parts[0].split(',')
 
-            print("OPSSSS", parts)
-
+            # go through the entire list of selected parts
+            # and add each one to the request process
             for i in parts:
                 if i != "'":
                     part = Part.objects.filter(id=int(i)).first()
-                    print("part "+str(i)+" " + str(part))
                     process.parts.add(part)
-        print("mY PARTSSSSSSSSSS", process.parts.all())
+
         process.save()
 
+    # set necessary objects for template and render it
     def render_process(self, form, html, id, process):
         movements = Movement.objects.filter(process=process)
         movementForm = MovementForm()
@@ -56,36 +60,38 @@ class ProcessDetails(View):
         path = 'processo' if id is None else 'editar'+str(id)
         myParts = None if process is None else process.parts.all()
         parts = p if myParts is None else p.difference(myParts)
-        return render(
-            self.request,
-            html, context={
-                'form': form, 'parts': parts, 'judges': judges,
-                'active': 1, 'tag': 'Projeto', 'back': 'process:list',
-                'partForm': partForm, 'id': id, 'judgeForm': judgeForm,
-                'path': path, 'judgeSelect': judgeSelect, 'myParts': myParts,
-                'movements': movements, 'movementForm': movementForm
-            })
 
+        context = {
+            'form': form, 'parts': parts, 'judges': judges,
+            'active': 1, 'tag': 'Projeto', 'back': 'process:list',
+            'partForm': partForm, 'id': id, 'judgeForm': judgeForm,
+            'path': path, 'judgeSelect': judgeSelect, 'myParts': myParts,
+            'movements': movements, 'movementForm': movementForm
+        }
+
+        return render(self.request, html, context)
+
+    # get instance of process if exists
     def get_process(self, id=None):
         process = None
         if id is not None:
-            print("NOT NONE")
             process = Process.objects.filter(
                 id=id
             ).first()
 
             if not process:
-                print("NENBNSNSBA")
                 raise Http404()
 
         return process
 
+    # GET method
     def get(self, request, id=None):
         process = self.get_process(id)
         form = ProcessForm(instance=process)
         html = 'adm/process/processRegister.html' if id is None else 'adm/process/processDetail.html'
         return self.render_process(form, html, id, process)
 
+    # POST method
     def post(self, request, id=None):
         process = self.get_process(id)
         form = ProcessForm(request.POST or None,
@@ -95,11 +101,13 @@ class ProcessDetails(View):
             # now form is valid and i can to save it
             process = form.save(commit=False)
             # now i can make changes in object edited
-
+            # calls method to add select objects into processo
             self.addParts(process)
 
             process.save()
 
+            # check if request post is to create or edit process,
+            # and redirect to respective page
             if id is not None:
                 messages.success(request, 'Processo Editado  com sucesso!')
                 return redirect('process:detail', id)
@@ -107,11 +115,8 @@ class ProcessDetails(View):
                 messages.success(
                     request, 'Processo Cadastrado com sucesso!')
                 return redirect('process:register')
-        else:
-            print('no')
 
         html = 'adm/process/processRegister.html' if id is None else 'adm/process/processDetail.html'
-
         return self.render_process(form, html, id, process)
 
 
@@ -120,7 +125,7 @@ class ProcessDetails(View):
     name='dispatch'
 )
 class ProcessDelete(ProcessDetails):
-
+    # method to delete instance of process model
     def get(self, request, id=None):
         process = self.get_process(id)
         process.delete()
@@ -134,12 +139,15 @@ class ProcessDelete(ProcessDetails):
 )
 class DeleteProcessPart(ProcessDetails):
 
+    # method to shut down part of its respective process. OBS: this method
+    # dont delete part, just remove of many to many relationship
     def get(self, request, id=None, idPart=None):
-        print("OOAOOOAOAOO")
+        # get process
         process = Process.objects.filter(id=id).first()
-        print("parts", process)
+
+        # if process not is null, then get part,
+        # remove of realitionship, and redirect to process detail page
         if process != None:
-            print("ola")
             part = process.parts.get(id=idPart)
             process.parts.remove(part)
             messages.success(

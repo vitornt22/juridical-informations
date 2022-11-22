@@ -21,6 +21,6 @@ class JudgeForm(forms.ModelForm):
         }
 
         widgets = {
-            'name': forms.TextInput(attrs={'placeholder': ' Nome Completo',  'class': 'form-control'}),  # noqa
-            'cnj': forms.NumberInput(attrs={'placeholder': ' CPF',  'class': 'form-control',  'maxlength': "14"}),  # noqa
+            'name': forms.TextInput(attrs={'placeholder': ' Nome Completo',  'class': 'form-control'}),
+            'cnj': forms.NumberInput(attrs={'placeholder': ' CPF',  'class': 'form-control',  'maxlength': "14"}),
         }

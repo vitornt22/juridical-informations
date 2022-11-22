@@ -10,16 +10,11 @@
       <!-- general form elements -->
       <div class="card card-lightblue">
         <div class="card-header">
-          <h3 class="card-title"> Editar Parte</h3>
+          <h3 class="card-title"> Editar Movimentação</h3>
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        
-          {% if idP != None  %}
-          <form method="POST" action="{%url 'part:detailPartProcess' id idP%}" enctype="multipart/form-data">
-          {% else %}
-          <form method="POST" action="{%url 'part:detail' id %}" enctype="multipart/form-data">
-          {% endif %}
+        <form method="POST" action="{%url 'movement:detail' idProcess id %}" enctype="multipart/form-data">
           {% csrf_token %}
 
           <div class="card-body">
@@ -27,13 +22,7 @@
           {{form}}
           </div>
           <div class="card-footer">
-
-          
-            {% if idP != None  %}
-            <a href="{%url path idP %}" type="button" class="btn bg-lightblue">Voltar</a>
-            {% else %}
-            <a href="{%url path %}" type="button" class="btn bg-lightblue">Voltar</a>
-            {% endif %}
+            <a href="{%url 'process:detail' idP %}" type="button" class="btn bg-lightblue">Voltar</a>
             <button type="submit" value="r" name="register" class="btn btn-primary">Cadastrar</button>
           </div>
         </form>

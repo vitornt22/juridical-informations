@@ -19,11 +19,13 @@ from .models import Part
 )
 class PartDetails(View):
 
+    # render request template
     def render_part(self, form, html, id, idP):
-        print('entra aqui')
         active = 2
         path = 'part:list'
-        if 'editarParte/process' in self.request.path:
+        # if id process is not None, set path with value to redirect
+        # to process detail  page, when click back button on html template
+        if idP is not None:
             path = 'process:detail'
             active = 1
         context = {'form': form,
@@ -32,6 +34,7 @@ class PartDetails(View):
                    'id': id, 'idP': idP, 'path': path}
         return render(self.request, html, context)
 
+    # get  instance of part if it exists
     def get_part(self, id=None):
         part = None
         if id is not None:
@@ -44,39 +47,38 @@ class PartDetails(View):
         print("MYY PARTTTTTT")
         return part
 
+    # GET method
     def get(self, request, id=None, editId=None, idP=None):
-        print("diiiiidiidi", id)
         html = 'adm/parts/processRegister.html' if id is None else 'adm/parts/partDetail.html'
         part = self.get_part(id)
-
         form = PartForm(instance=part or None)
         return self.render_part(form, html, id, idP)
 
-    def post(self, request, id=None, path=None, editId=None, idP=None):
+    # POST method
+    def post(self, request, id=None, path=None,  idP=None):
         part = self.get_part(id)
-        print('entrando POST')
         form = PartForm(request.POST, request.FILES, instance=part)
-        print("pathh", path)
 
         if form.is_valid():
             # now form is valid and i can to save it
             p = form.save(commit=False)
             # now i can make changes in object edited
             p.save()
+
+            # check is post is to creat or edit part, and send message to  request template
             if id is not None:
                 messages.success(
                     request, 'Parte  Editada  com sucesso!')
             else:
                 messages.success(
                     request, 'Parte Cadastrada com sucesso!')
-        print("TESTS ID", id)
+
+        # check if post is to create or edit
         if id is None:
+            # if request was been made in process page, redirect to this same page
+            # else, redirect to list parts page
             if path == 'processo':
                 return redirect('process:register')
-            elif 'editar' in path:
-                idProcess = int(path.replace('editar', ''))
-                print('myInt', idProcess)
-                return redirect('process:detail', idProcess)
             else:
                 return redirect('part:list')
 
@@ -90,7 +92,7 @@ class PartDetails(View):
     name='dispatch'
 )
 class PartDelete(PartDetails):
-
+    # method to delete part instance
     def get(self, request, id=None):
         part = self.get_part(id)
         name = part.category+': ' + part.name
@@ -112,6 +114,7 @@ class PartList(ListView):
     def get_queryset(self, *args, **kwargs):
         search = self.request.GET.get('search')
         qs = super().get_queryset(*args, **kwargs)
+
         if search:
             qs = qs.filter(Q(
                 Q(name__icontains=search) |

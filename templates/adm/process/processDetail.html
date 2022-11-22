@@ -67,10 +67,10 @@
           <tbody>
             {% for i in movements  %}
             <tr class="">
-              <td>{{i.date}}/td>
-              <td style="word-break: break-word;">i.description</td>
-              <td><button class="btn btn-primary">Editar</td>
-                <td><button class="btn btn-danger">Remover</td>
+              <td>{{i.date}}</td>
+              <td style="word-break: break-word;">{{i.description}}</td>
+              <td><a href="{%url 'movement:detail' i.process.id  i.id %}" class="btn btn-primary">Editar</a>
+                <td><a href="{%url 'movement:delete' i.id %}" class="btn btn-danger">Remover</a>
 
             </tr>
             {% endfor %}

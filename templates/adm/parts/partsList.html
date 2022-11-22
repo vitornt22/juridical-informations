@@ -30,8 +30,8 @@
       <td>{{i.category}}</td>
         <td>{{i.name}}</td>
         <td>{{i.cpf}}</td>
-        <td><a href="{% url 'part:detail' i.id %}" style="color: #FFF;"  class='btn btn-primary'>Editar</a></td>
-        <td><a href="{% url 'part:delete' i.id %}" style="color: #FFF;" type="submit" class='areSure btn btn-danger'>Remover</a></td>
+        <td><a href="{% url 'part:detail' i.id  %}" style="color: #FFF;"  class='btn btn-primary'>Editar</a></td>
+        <td><a href="{% url 'part:delete' i.id  %}" style="color: #FFF;" type="submit" class='areSure btn btn-danger'>Remover</a></td>
 
       </tr>
       {% endfor %}

@@ -20,13 +20,15 @@ from .models import Judge
 )
 class JudgeDetails(View):
 
+    # function to render html template of request
     def render_judge(self, form, html, id, idP):
-        print('entra aqui')
-        return render(self.request, html, context={'form': form,
-                                                   'active': 3, 'tag': 'Projeto',
-                                                   'back': 'judge:list',
-                                                   'id': id})
+        context = {'form': form,
+                   'active': 3, 'tag': 'Projeto',
+                   'back': 'judge:list',
+                   'id': id}
+        return render(self.request, html, context)
 
+    # get instance of object if it exists
     def get_judge(self, id=None):
         judge = None
         if id is not None:
@@ -38,6 +40,26 @@ class JudgeDetails(View):
                 raise Http404()
         return judge
 
+    # this method define route redirect accordingly with request
+    def calculate_redirect_route(self, path):
+        # if post is to create
+        if id is None:
+            # if the request was made on the process register screen
+            # redirect to this screen
+            if path == 'processo':
+                return redirect('process:register')
+            # if the request was made on the process detail
+            # redirect to this same screen
+            elif 'editar' in path:
+                idProcess = int(path.replace('editar', ''))
+                print('myInt', idProcess)
+                return redirect('process:detail', idProcess)
+            # if the conditions above don work, its cause the request was made
+            # part list screen, and this method redirect to this same screen
+            else:
+                return redirect('part:list')
+
+    # GET  request method
     def get(self, request, id=None):
         print("diiiiidiidi", id)
         html = 'adm/process/processRegister.html' if id is None else 'adm/judge/judgeDetail.html'
@@ -46,37 +68,28 @@ class JudgeDetails(View):
         form = JudgeForm(instance=judge or None)
         return self.render_judge(form, html, id)
 
+    # POST request method
     def post(self, request, id=None, path=None):
         judge = self.get_judge(id)
-        print('entrando POST')
         form = JudgeForm(request.POST, request.FILES, instance=judge)
-        print("IDDD", id)
 
         if form.is_valid():
             # now form is valid and i can to save it
             p = form.save(commit=False)
             # now i can make changes in object edited
             p.save()
+            # check if post is create or editid and send message to template
             if id is not None:
                 messages.success(
                     request, 'Juiz  Editado  com sucesso!')
             else:
                 messages.success(
                     request, 'Juiz Cadastrado com sucesso!')
-        else:
-            print('no')
 
-        if id is None:
-            if path == 'processo':
-                return redirect('process:register')
-            elif 'editar' in path:
-                idProcess = int(path.replace('editar', ''))
-                print('myInt', idProcess)
-                return redirect('process:detail', idProcess)
-            else:
-                return redirect('part:list')
+        # define a possible redirect route
+        self.calculate_redirect_route()
 
-        print('chegando ate aqui')
+        # if method above don't work, to go  to render template
         html = 'adm/judge/judgeDetail.html'
 
         return self.render_judge(form, html, id)
@@ -87,8 +100,8 @@ class JudgeDetails(View):
     name='dispatch'
 )
 class JudgeDelete(JudgeDetails):
+    # methodo GET to delete any judge instance passed by request
     def get(self, request, id=None):
-        print("DELETEEE")
         judge = Judge.objects.filter(id=id).first()
         name = judge.name
         judge.delete()
@@ -107,12 +120,9 @@ class JudgeList(ListView):
     template_name = 'adm/judge/judgesList.html'
 
     def get_queryset(self, *args, **kwargs):
-        print('HELLO')
         search = self.request.GET.get('search')
-        print(search)
         qs = super().get_queryset(*args, **kwargs)
         if search is not None:
-            print('akoosjdojo')
             qs = qs.filter(Q(Q(name__icontains=search)
                            | Q(cnj__icontains=search)))
         return qs
