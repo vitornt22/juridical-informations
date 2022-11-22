@@ -60,16 +60,16 @@ class JudgeDetails(View):
                 return redirect('part:list')
 
     # GET  request method
-    def get(self, request, id=None):
+    def get(self, request, id=None, idP=None):
         print("diiiiidiidi", id)
         html = 'adm/process/processRegister.html' if id is None else 'adm/judge/judgeDetail.html'
         judge = self.get_judge(id)
 
         form = JudgeForm(instance=judge or None)
-        return self.render_judge(form, html, id)
+        return self.render_judge(form, html, id, idP)
 
     # POST request method
-    def post(self, request, id=None, path=None):
+    def post(self, request, id=None, path=None, idP=None):
         judge = self.get_judge(id)
         form = JudgeForm(request.POST, request.FILES, instance=judge)
 
@@ -87,12 +87,12 @@ class JudgeDetails(View):
                     request, 'Juiz Cadastrado com sucesso!')
 
         # define a possible redirect route
-        self.calculate_redirect_route()
+        self.calculate_redirect_route(path)
 
         # if method above don't work, to go  to render template
         html = 'adm/judge/judgeDetail.html'
 
-        return self.render_judge(form, html, id)
+        return self.render_judge(form, html, id, idP)
 
 
 @method_decorator(

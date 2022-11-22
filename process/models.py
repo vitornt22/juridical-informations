@@ -22,5 +22,6 @@ class Process (models.Model):
     status = models.BooleanField(default=True, null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)
 
+
 # parts
 # movement

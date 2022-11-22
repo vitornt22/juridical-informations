@@ -12,9 +12,12 @@ from process.models import Process
 from .admin_processes_views import ProcessDelete, ProcessDetails, ProcessList
 
 
+# Class view to home render home page
 class Home(View):
     def get(self, request):
         return render(request, 'clients/index.html', {'active': "1"})
+
+# Class view to logout
 
 
 class Logout(View):
@@ -22,20 +25,21 @@ class Logout(View):
         logout(request)
         return redirect('process:loginPage')
 
+# Class view to login and authenticate page
+
 
 class LoginPage(View):
     def get(self, request):
         return render(request, 'adm/loginPage.html', {})
 
+    # try authenticate user, else return message login error
     def post(self, request, *args, **kwargs):
-        print('ENTROU AQUI')
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
 
         if user is not None:
             login(request, user)
-            print("USUARIO", user)
             return redirect(reverse('process:list'))
         else:
             messages.error(
@@ -43,12 +47,15 @@ class LoginPage(View):
         return redirect('process:loginPage')
 
 
+# class to details of selected process
 class ProcessClientsDetail(View):
     def get(self, request, id=None):
         process = Process.objects.filter(id=id).first()
         return render(request, 'clients/details.html', {'process': process, 'active': 2})
 
 
+# class to process list to clients,without option
+# and permissions to edit, create or delete funtions
 class ListingProcess(ListView):
     model = Process
     context_object_name = 'processes'

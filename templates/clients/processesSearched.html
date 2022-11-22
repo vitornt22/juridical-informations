@@ -9,7 +9,7 @@
       <div class="m-auto col-md-10 ">
         <!-- Textos da seção -->
         <div class="align-self-center">
-          <form method="GET" class="pt-5 mt-4 mb-4">
+          <form method="GET" action="{% url 'process:searchProcess' %}" class="pt-5 mt-4 mb-4">
             <div class="input-group input-group-lg">
               <input name="search" type="text" placeholder="Pesquisar processo (nº, juiz, nome, classe)" class="form-control">
               <div class="input-group-append">
@@ -19,6 +19,7 @@
           </form>
         </div>
       </div>
+     
     </div>
     <!--/fim textos da seção -->
   </div>
@@ -33,7 +34,9 @@
       
     
     {%else%}
+   
     {% for i in processes  %}
+    
     <div class="m-auto col-md-10 ">
       <!-- Textos da seção -->
       <hr class="solid">

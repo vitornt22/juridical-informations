@@ -64,7 +64,7 @@
         <ul class="navbar-nav ms-auto d-flex flex-row">
           <!-- Notification dropdown -->
           <li class="nav-item me-3 me-lg-0">
-            <a type='button'  class="areSure nav-link" href="#">
+            <a type='button'  class="logout nav-link" href="#">
               <p>Sair</p>
             </a>
           </li>
@@ -113,7 +113,7 @@
         $('#selectDiv').multiselect();
     });
 
-    $(document).on('click', '.areSure', function(e){
+    $(document).on('click', '.logout', function(e){
       return Swal.fire({
         title: 'Deseja Realmente Sair',
         showCancelButton: true,

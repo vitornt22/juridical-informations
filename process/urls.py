@@ -16,6 +16,7 @@ urlpatterns = [
          views.ProcessClientsDetail.as_view(), name='detailClient'),
     path('pequisarProcessos/', views.ListingProcess.as_view(), name='searchProcess'),
     path('processos', views.ProcessList.as_view(), name='list'),
+    path('export', views.ProcessList.as_view(), name='export'),
     path('processo/', views.ProcessDetails.as_view(), name='register'),
     path('processo/<int:id>/', views.ProcessDetails.as_view(), name='detail'),
     path('deletar/Processo/<int:id>/',
