@@ -31,9 +31,9 @@
              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
               Inserir Nova Parte
             </button>
-            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter2">
+            <a href="{%url 'judge:list' %}" type="button" class="btn btn-warning">
                Adicionar Juiz
-            </button>
+            </a>
             <a type="button" href="{%url 'process:delete' id %}" style="color:#FFF;" class="areSure btn btn-danger" >
               Remover Processo
             </a>
@@ -159,7 +159,7 @@
 <script>
   {% for msg in messages%}
   Swal.fire({
-    icon: 'success',
+    icon: '{{msg.tags}}',
     title: '{{msg}}',
   })
   {%endfor%}

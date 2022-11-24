@@ -1,6 +1,7 @@
 # flake8: noqa
 import datetime
 import io
+from random import randint
 
 import xlwt
 from django.contrib import messages
@@ -31,6 +32,15 @@ from process.models import Process
 )
 class ProcessDetails(View):
 
+    def generate_number_process(self):
+        verify = True
+        number = 0
+        while (verify == True):
+            number = randint(100000, 999999)
+            if Process.objects.filter(number=number).exists() is False:
+                verify = False
+        return number
+
     # this method add all selected parts to  process
     def addParts(self, process):
         parts = self.request.POST.getlist('parts')
@@ -59,6 +69,7 @@ class ProcessDetails(View):
         movements = Movement.objects.filter(process=process)
         movementForm = MovementForm()
         partForm = PartForm()
+        number = None if process is None else process.number
         judgeForm = JudgeForm()
         judgeSelect = Process.objects.filter(id=id).first()
         judges = Judge.objects.all()
@@ -72,7 +83,8 @@ class ProcessDetails(View):
             'active': 1, 'tag': 'Projeto', 'back': 'process:list',
             'partForm': partForm, 'id': id, 'judgeForm': judgeForm,
             'path': path, 'judgeSelect': judgeSelect, 'myParts': myParts,
-            'movements': movements, 'movementForm': movementForm
+            'movements': movements, 'movementForm': movementForm,
+            'number': number
         }
 
         return render(self.request, html, context)
@@ -109,12 +121,15 @@ class ProcessDetails(View):
             # now i can make changes in object edited
             # calls method to add select objects into processo
             self.addParts(process)
+            if id is None:
+                process.number = self.generate_number_process()
 
             process.save()
 
             # check if request post is to create or edit process,
             # and redirect to respective page
             if id is not None:
+                print("MY PATH", request.path)
                 messages.success(request, 'Processo Editado  com sucesso!')
                 return redirect('process:detail', id)
             else:
@@ -155,6 +170,8 @@ class DeleteProcessPart(ProcessDetails):
         # remove of realitionship, and redirect to process detail page
         if process != None:
             part = process.parts.get(id=idPart)
+            movement = Movement.objects.filter(process=process)
+            movement.delete()
             process.parts.remove(part)
             messages.success(
                 self.request, 'Parte desligada com sucesso com sucesso')

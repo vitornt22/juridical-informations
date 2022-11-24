@@ -40,26 +40,8 @@ class JudgeDetails(View):
                 raise Http404()
         return judge
 
-    # this method define route redirect accordingly with request
-    def calculate_redirect_route(self, path):
-        # if post is to create
-        if id is None:
-            # if the request was made on the process register screen
-            # redirect to this screen
-            if path == 'processo':
-                return redirect('process:register')
-            # if the request was made on the process detail
-            # redirect to this same screen
-            elif 'editar' in path:
-                idProcess = int(path.replace('editar', ''))
-                print('myInt', idProcess)
-                return redirect('process:detail', idProcess)
-            # if the conditions above don work, its cause the request was made
-            # part list screen, and this method redirect to this same screen
-            else:
-                return redirect('part:list')
-
     # GET  request method
+
     def get(self, request, id=None, idP=None):
         print("diiiiidiidi", id)
         html = 'adm/process/processRegister.html' if id is None else 'adm/judge/judgeDetail.html'
@@ -86,8 +68,8 @@ class JudgeDetails(View):
                 messages.success(
                     request, 'Juiz Cadastrado com sucesso!')
 
-        # define a possible redirect route
-        self.calculate_redirect_route(path)
+        if id is None:
+            return redirect('judge:list')
 
         # if method above don't work, to go  to render template
         html = 'adm/judge/judgeDetail.html'

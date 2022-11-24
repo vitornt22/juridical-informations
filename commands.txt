@@ -1,0 +1,13 @@
+# built image
+
+docker-compose build
+
+# run the container 
+
+docker-compose up -d
+
+
+# bash 
+
+docker exec -t -i <IDCONTAINER> bash
+

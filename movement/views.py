@@ -9,7 +9,6 @@ from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic.list import ListView
-
 from process.models import Process
 
 from .forms import MovementForm

@@ -14,4 +14,4 @@ class Part (models.Model):
     category = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.name + '--' + str(self.id)
+        return self.name + '--' + self.category

@@ -59,6 +59,10 @@ class PartDetails(View):
         part = self.get_part(id)
         form = PartForm(request.POST, request.FILES, instance=part)
 
+        cpf = form.data['cpf']
+        if Part.objects.filter(cpf=cpf).exists:
+            messages.error(request, 'CPF existente, tente novamente')
+
         if form.is_valid():
             # now form is valid and i can to save it
             p = form.save(commit=False)
@@ -78,7 +82,12 @@ class PartDetails(View):
             # if request was been made in process page, redirect to this same page
             # else, redirect to list parts page
             if path == 'processo':
+                print('MY PATH', request.path)
                 return redirect('process:register')
+            elif 'edit' in path:
+                idProcess = int(path.replace('editar', ''))
+                print("ID PROCESS", idProcess)
+                return redirect('process:detail', idProcess)
             else:
                 return redirect('part:list')
 
