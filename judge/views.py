@@ -69,7 +69,17 @@ class JudgeDetails(View):
                     request, 'Juiz Cadastrado com sucesso!')
 
         if id is None:
-            return redirect('judge:list')
+            # if request was been made in process page, redirect to this same page
+            # else, redirect to list parts page
+            if path == 'processo':
+                print('MY PATH', request.path)
+                return redirect('process:register')
+            elif 'edit' in path:
+                idProcess = int(path.replace('editar', ''))
+                print("ID PROCESS", idProcess)
+                return redirect('process:detail', idProcess)
+            else:
+                return redirect('judge:list')
 
         # if method above don't work, to go  to render template
         html = 'adm/judge/judgeDetail.html'
