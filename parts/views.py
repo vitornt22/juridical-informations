@@ -7,10 +7,45 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.generic import DetailView
+from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
+
+from judge.forms import JudgeForm
+from judge.models import Judge
+from process.forms import ProcessForm
 
 from .forms import PartForm
 from .models import Part
+
+
+class PartCreateView(CreateView):
+    model = Part
+    form_class = PartForm
+    template_name = 'adm/process/processRegister.html'
+    success_url = 'process:register'
+
+    def form_valid(self, form):
+        part = form.save(commit=False)
+        if Part.objects.filter(cpf=part.cpf):
+            messages.error(self.request, 'CNJ existente, tente novamente')
+        part.save()
+        messages.success(self.request, 'Parte registrada com sucess')
+        if self.request.path == '/process/partes/registrar/':
+            print('ola')
+            return redirect('process:register')
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = ProcessForm()
+        context['partForm'] = PartForm()
+        context['judgeForm'] = PartForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        post = super().post(request, *args, **kwargs)
+        return post
 
 
 @method_decorator(

@@ -8,6 +8,8 @@ app_name = 'judge'
 urlpatterns = [
     path('juizes/', views.JudgeList.as_view(), name='list'),
     path('<str:path>/novo/juiz/', views.JudgeDetails.as_view(), name='register'),
+    path('processo/juiz/registrar', views.JudgeCreateView.as_view(),
+         name='registerProcessJudge'),
     path('Editar/juiz/<int:id>/', views.JudgeDetails.as_view(), name='detail'),
     path('juiz/deletar/<int:id>/', views.JudgeDelete.as_view(), name='delete')
 ]

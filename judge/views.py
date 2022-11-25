@@ -8,10 +8,42 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
+
+from process.forms import ProcessForm
 
 from .forms import JudgeForm
 from .models import Judge
+
+
+class JudgeCreateView(CreateView):
+    model = Judge
+    form_class = JudgeForm
+    template_name = 'adm/process/processRegister.html'
+    success_url = 'process:list'
+
+    def form_valid(self, form):
+        judge = form.save(commit=False)
+        if Judge.objects.filter(cnj=judge.cnj):
+            messages.error(self.request, 'CNJ existente, tente novamente')
+        judge.save()
+        messages.success(self.request, 'Juiz registrada com sucess')
+        if self.request.path == '/process/partes/registrar/':
+            print('ola')
+            return redirect('process:register')
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = ProcessForm()
+        context['partForm'] = JudgeForm()
+        context['judgeForm'] = JudgeForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        post = super().post(request, *args, **kwargs)
+        return post
 
 
 @method_decorator(
@@ -41,9 +73,7 @@ class JudgeDetails(View):
         return judge
 
     # GET  request method
-
     def get(self, request, id=None, idP=None):
-        print("diiiiidiidi", id)
         html = 'adm/process/processRegister.html' if id is None else 'adm/judge/judgeDetail.html'
         judge = self.get_judge(id)
 
@@ -72,11 +102,9 @@ class JudgeDetails(View):
             # if request was been made in process page, redirect to this same page
             # else, redirect to list parts page
             if path == 'processo':
-                print('MY PATH', request.path)
                 return redirect('process:register')
             elif 'edit' in path:
                 idProcess = int(path.replace('editar', ''))
-                print("ID PROCESS", idProcess)
                 return redirect('process:detail', idProcess)
             else:
                 return redirect('judge:list')

@@ -17,9 +17,10 @@ urlpatterns = [
     path('pequisarProcessos/', views.ListingProcess.as_view(), name='searchProcess'),
     path('processos', views.ProcessList.as_view(), name='list'),
     path('export', views.ProcessList.as_view(), name='export'),
-    path('registrar/processo/', views.ProcessDetails.as_view(), name='register'),
-    path('editar/processo/<int:id>/',
-         views.ProcessDetails.as_view(), name='detail'),
+
+    path('processo/registrar/', views.ProcessCreateView.as_view(), name='register'),
+    path('processo/editar/<int:pk>/',
+         views.ProcessUpdateView.as_view(), name='detail'),
     path('deletar/Processo/<int:id>/',
          views.ProcessDelete.as_view(), name='delete'),
     path('desligarParte/<int:id>/<int:idPart>',

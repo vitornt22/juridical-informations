@@ -7,6 +7,8 @@ from . import views
 app_name = 'part'
 urlpatterns = [
     path('partes/', views.PartList.as_view(), name='list'),
+    path('process/partes/registrar/',
+         views.PartCreateView.as_view(), name='processPartRegister'),
     path('<str:path>/novaParte/',
          views.PartDetails.as_view(), name='register'),
     path('editarParte/<int:id>/', views.PartDetails.as_view(), name='detail'),

@@ -4,6 +4,7 @@ from django.urls import reverse
 
 # Create your tests here.
 class JudgeUrlsTest(TestCase):
+
     def test_the_pytest_is_ok(self):
         assert 1 == 1
 

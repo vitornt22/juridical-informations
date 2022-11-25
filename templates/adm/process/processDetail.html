@@ -18,7 +18,7 @@
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form method="POST" action="{%url  'process:detail' id %}" enctype="multipart/form-data">
+        <form method="POST" action="{%url  'process:detail' object.id %}" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="card-body">
               {% include 'adm/process/processForm.html' %}
@@ -31,10 +31,10 @@
              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
               Inserir Nova Parte
             </button>
-            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter2">
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal2">
                Adicionar Juiz
             </button>
-            <a type="button" href="{%url 'process:delete' id %}" style="color:#FFF;" class="areSure btn btn-danger" >
+            <a type="button" href="{%url 'process:delete' object.id %}" style="color:#FFF;" class="areSure btn btn-danger" >
               Remover Processo
             </a>
           </div>

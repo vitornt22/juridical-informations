@@ -4,7 +4,7 @@ import datetime
 from django import forms
 from django.core.exceptions import ValidationError
 
-from ijp import settings
+from juridical_processes_manager import settings
 
 from .models import Process
 

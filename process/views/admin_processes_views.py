@@ -13,6 +13,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.generic.edit import CreateView
 from django.views.generic.list import ListView
 from xlwt import Workbook
 

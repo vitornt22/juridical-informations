@@ -13,7 +13,6 @@ fi
 
 source /webapps/.venv/bin/activate
 python3 manage.py makemigrations
-blabla
 python3 manage.py migrate
 
 exec "$@"

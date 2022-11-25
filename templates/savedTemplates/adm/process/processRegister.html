@@ -1,0 +1,62 @@
+{% extends 'adm/baseAdmin.html' %}
+{% load static %}
+{% load crispy_forms_tags%}
+
+
+{%block content%}
+<div class="row" >
+    <!-- left column -->
+    <div class="col-md-12">
+      <!-- general form elements -->
+      <div class="card card-lightblue">
+        <div class="card-header">
+          <h3 class="card-title">Cadastrar Processo</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <form method="POST" action="{%url  'process:register'%}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="card-body">
+              {% include 'adm/process/processForm.html' %}
+          </div>
+          <!-- /.card-body -->
+          <div class="card-footer">
+            <a href="#"href="{% url 'process:list'  %}" type="button" class="btn  btn-light  border-0">Voltar</a>
+            <button type="submit" name="register" class="btn btn-primary">Cadastrar</button>
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCenter">
+              Inserir Nova Parte
+            </button>
+            <button  type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModalCenter" >
+               Adicionar Juiz
+            </button>
+          </div>
+        </form>
+      </div>
+      <!-- /.card -->
+    </div>
+  </div>
+
+  {% include 'adm/parts/part_modal.html' %}
+  {% include 'adm/judge/judge_modal.html' %}
+  
+{%endblock content%}
+
+{%block addScript%}
+<script type="text/javascript">
+
+  VirtualSelect.init({
+    ele: '#multipleSelect',
+    multiple: true
+
+  });
+</script>
+
+<script>
+  {% for msg in messages%}
+  Swal.fire({
+    icon: '{{msg.tags}}',
+    title: '{{msg}}',
+  })
+  {%endfor%}
+</script>
+{%endblock addScript%}
