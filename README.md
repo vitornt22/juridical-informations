@@ -11,90 +11,53 @@ These instructions will help you to run the system on your machine.
 
 ### 📋 1- run the following commands to access run the system
 
-
-De que coisas você precisa para instalar o software e como instalá-lo?
+starting services image of build configuration, and start all services there is in docker-compose file
 
 ```
 docker-compose build
 docker-compose up -d
 ```
 
+or 
+
+```
+docker-compose up --build
+```
+
 ### 🔧 2- Access below link to execute system
 
 
 
-```
-http://localhost:8000/
-```
 
-E repita:
+[http://localhost:8000/](http://localhost:8000/)
 
-```
-Até finalizar
-```
 
-Termine com um exemplo de como obter dados do sistema ou como usá-los para uma pequena demonstração.
 
-## ⚙️ Executando os testes
+### ⚙️ 3- Login  with one of these users below
 
-Explicar como executar os testes automatizados para este sistema.
-
-### 🔩 Analise os testes de ponta a ponta
-
-Explique que eles verificam esses testes e porquê.
+In login page, login with one of these username and passwords 
 
 ```
-Dar exemplos
+username: vitor
+password: 123
 ```
 
-### ⌨️ E testes de estilo de codificação
-
-Explique que eles verificam esses testes e porquê.
+or 
 
 ```
-Dar exemplos
+username: caio
+password: 123
 ```
 
-## 📦 Implantação
+### 4- Setup Finish: After that, you can utilize service offers to our project 
 
-Adicione notas adicionais sobre como implantar isso em um sistema ativo
-
-## 🛠️ Construído com
-
-Mencione as ferramentas que você usou para criar seu projeto
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - O framework web usado
-* [Maven](https://maven.apache.org/) - Gerente de Dependência
-* [ROME](https://rometools.github.io/rome/) - Usada para gerar RSS
-
-## 🖇️ Colaborando
-
-Por favor, leia o [COLABORACAO.md](https://gist.github.com/usuario/linkParaInfoSobreContribuicoes) para obter detalhes sobre o nosso código de conduta e o processo para nos enviar pedidos de solicitação.
-
-## 📌 Versão
-
-Nós usamos [SemVer](http://semver.org/) para controle de versão. Para as versões disponíveis, observe as [tags neste repositório](https://github.com/suas/tags/do/projeto). 
-
-## ✒️ Autores
-
-Mencione todos aqueles que ajudaram a levantar o projeto desde o seu início
-
-* **Um desenvolvedor** - *Trabalho Inicial* - [umdesenvolvedor](https://github.com/linkParaPerfil)
-* **Fulano De Tal** - *Documentação* - [fulanodetal](https://github.com/linkParaPerfil)
-
-Você também pode ver a lista de todos os [colaboradores](https://github.com/usuario/projeto/colaboradores) que participaram deste projeto.
-
-## 📄 Licença
-
-Este projeto está sob a licença (sua licença) - veja o arquivo [LICENSE.md](https://github.com/usuario/projeto/licenca) para detalhes.
-
-## 🎁 Expressões de gratidão
-
-* Conte a outras pessoas sobre este projeto 📢;
-* Convide alguém da equipe para uma cerveja 🍺;
-* Um agradecimento publicamente 🫂;
-* etc.
+To browse through pages of system to access functions and services by out system
 
 
----
-⌨️ com ❤️ por [Armstrong Lohãns](https://gist.github.com/lohhans) 😊
+
+
+
+
+
+
+
