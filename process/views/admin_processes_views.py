@@ -1,21 +1,17 @@
 # flake8: noqa
-import datetime
-import io
 from random import randint
 
-import xlwt
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.http import FileResponse, HttpResponse
-from django.http.response import Http404
+from django.http import Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic.edit import CreateView
+from django.views.generic import DetailView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-from xlwt import Workbook
 
 from judge.forms import JudgeForm
 from judge.models import Judge
@@ -25,158 +21,78 @@ from parts.forms import PartForm
 from parts.models import Part
 from process.forms import ProcessForm
 from process.models import Process
+from utils.export_csv import export_csv
+from utils.process_create_functions import addParts, generate_number_process
 
 
 @method_decorator(
     login_required(login_url='process:loginPage', redirect_field_name='next'),
     name='dispatch'
 )
-class ProcessDetails(View):
+class ProcessUpdateView(UpdateView):
+    model = Process
+    form_class = ProcessForm
+    template_name = 'adm/process/processDetail.html'
+    success_url = 'process:detail'
 
-    def generate_number_process(self):
-        verify = True
-        number = 0
-        while (verify == True):
-            number = randint(100000, 999999)
-            if Process.objects.filter(number=number).exists() is False:
-                verify = False
-        return number
-
-    # this method add all selected parts to  process
-    def addParts(self, process):
-        parts = self.request.POST.getlist('parts')
-        judge = self.request.POST.get('judge')
-
-        # set select judge to process and save it
-        if len(judge) > 0:
-            process.judge = Judge.objects.get(id=judge)
-        process.save()
-
-        # check if list of parts is not None to add in process
-        if parts[0] != '':
-            parts = parts[0].split(',')
-
-            # go through the entire list of selected parts
-            # and add each one to the request process
-            for i in parts:
-                if i != "'":
-                    part = Part.objects.filter(id=int(i)).first()
-                    process.parts.add(part)
-
-        process.save()
-
-    # set necessary objects for template and render it
-    def render_process(self, form, html, id, process):
-        movements = Movement.objects.filter(process=process)
-        movementForm = MovementForm()
-        partForm = PartForm()
-        number = None if process is None else process.number
-        judgeForm = JudgeForm()
-        judgeSelect = Process.objects.filter(id=id).first()
-        judges = Judge.objects.all()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        process = context['process']
+        context['movements'] = Movement.objects.filter(process=process)
+        context['movementForm'] = MovementForm()
+        context['partForm'] = PartForm()
+        context['active'] = 1
+        context['number'] = None if process is None else process.number
+        context['judgeForm'] = JudgeForm()
+        context['judgeSelect'] = process.judge
+        context['judges'] = Judge.objects.all()
+        context['partPath'] = 'part:processDetailPart'
+        context['judgePath'] = 'judge:processDetailJudge'
         p = Part.objects.all()
-        path = 'processo' if id is None else 'editar'+str(id)
         myParts = None if process is None else process.parts.all()
-        parts = p if myParts is None else p.difference(myParts)
+        context['myParts'] = myParts
+        context['parts'] = p if myParts is None else p.difference(myParts)
+        return context
 
-        context = {
-            'form': form, 'parts': parts, 'judges': judges,
-            'active': 1, 'tag': 'Projeto', 'back': 'process:list',
-            'partForm': partForm, 'id': id, 'judgeForm': judgeForm,
-            'path': path, 'judgeSelect': judgeSelect, 'myParts': myParts,
-            'movements': movements, 'movementForm': movementForm,
-            'number': number
-        }
-
-        return render(self.request, html, context)
-
-    # get instance of process if exists
-    def get_process(self, id=None):
-        process = None
-        if id is not None:
-            process = Process.objects.filter(
-                id=id
-            ).first()
-
-            if not process:
-                raise Http404()
-
-        return process
-
-    # GET method
-    def get(self, request, id=None):
-        process = self.get_process(id)
-        form = ProcessForm(instance=process)
-        html = 'adm/process/processRegister.html' if id is None else 'adm/process/processDetail.html'
-        return self.render_process(form, html, id, process)
-
-    # POST method
-    def post(self, request, id=None):
-        process = self.get_process(id)
-        form = ProcessForm(request.POST or None,
-                           instance=process)
-
-        if form.is_valid():
-            # now form is valid and i can to save it
-            process = form.save(commit=False)
-            # now i can make changes in object edited
-            # calls method to add select objects into processo
-            self.addParts(process)
-            if id is None:
-                process.number = self.generate_number_process()
-
-            process.save()
-
-            # check if request post is to create or edit process,
-            # and redirect to respective page
-            if id is not None:
-                print("MY PATH", request.path)
-                messages.success(request, 'Processo Editado  com sucesso!')
-                return redirect('process:detail', id)
-            else:
-                messages.success(
-                    request, 'Processo Cadastrado com sucesso!')
-                return redirect('process:register')
-
-        html = 'adm/process/processRegister.html' if id is None else 'adm/process/processDetail.html'
-        return self.render_process(form, html, id, process)
-
-
-@method_decorator(
-    login_required(login_url='process:loginPage', redirect_field_name='next'),
-    name='dispatch'
-)
-class ProcessDelete(ProcessDetails):
-    # method to delete instance of process model
-    def get(self, request, id=None):
-        process = self.get_process(id)
-        process.delete()
-        messages.success(self.request, 'Deletado com sucesso')
-        return redirect('process:list')
-
-
-@method_decorator(
-    login_required(login_url='process:loginPage', redirect_field_name='next'),
-    name='dispatch'
-)
-class DeleteProcessPart(ProcessDetails):
-
-    # method to shut down part of its respective process. OBS: this method
-    # dont delete part, just remove of many to many relationship
-    def get(self, request, id=None, idPart=None):
-        # get process
-        process = Process.objects.filter(id=id).first()
-
-        # if process not is null, then get part,
-        # remove of realitionship, and redirect to process detail page
-        if process != None:
-            part = process.parts.get(id=idPart)
-            movement = Movement.objects.filter(process=process)
-            movement.delete()
-            process.parts.remove(part)
-            messages.success(
-                self.request, 'Parte desligada com sucesso com sucesso')
+    def form_valid(self, form):
+        process = form.save(commit=False)
+        addParts(self, process)
+        process.number = generate_number_process(self)
+        messages.success(self.request, 'Processso Alterado com sucesso')
+        id = self.kwargs.get('pk')
         return redirect('process:detail', id)
+
+
+@method_decorator(
+    login_required(login_url='process:loginPage',
+                   redirect_field_name='next'),
+    name='dispatch'
+)
+class ProcessCreateView(CreateView):
+    model = Process
+    form_class = ProcessForm
+    context_object_name = 'form'
+    template_name = 'adm/process/processRegister.html'
+    success_url = 'process:list'
+
+    def form_valid(self, form):
+        process = form.save(commit=False)
+        addParts(self, process)
+        process.number = generate_number_process(self)
+        messages.success(self.request, 'Processo registrado com sucesso!')
+        process.save()
+        return redirect('process:register')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['parts'] = Part.objects.all()
+        context['active'] = 1
+        context['partForm'] = PartForm()
+        context['judgeForm'] = JudgeForm()
+        context['judges'] = Judge.objects.all()
+        context['partPath'] = 'part:processPartRegister'
+        context['judgePath'] = 'judge:registerProcessJudge'
+        return context
 
 
 @method_decorator(
@@ -189,43 +105,13 @@ class ProcessList(ListView):
     ordering = ['-distribution']
     template_name = 'adm/process/processList.html'
 
-    # method to export processes sheet
-
-    def export(self, qs):
-        list_qs = qs.values_list()
-        date = str(datetime.date.today())
-        filename = 'processos-'+date+'.xls'
-        response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-
-        fields = ['id', 'Nº', 'Classe', 'Vara', 'Foro', 'Assunto', 'Orgão', 'Area',
-                  'COMARCA', 'Controle', 'Distribuição', 'Juiz', 'Valor', 'Status']
-
-        wb = Workbook(encoding='utf-8')
-        processes = wb.add_sheet('Processos')
-
-        # add columns of processs
-        for i in range(len(fields)):
-            processes.write(0, i, str(fields[i]))
-        # add column values to exportt
-        row = 1
-        for i in list_qs:
-            column = 0
-            for j in i:
-                if (str(i[column]) != 'None'):
-                    processes.write(row, column, str(i[column]))
-                column += 1
-            row += 1
-        wb.save(response)
-
-        return response
-
-    # GET method to list processes in adm page
+    # GET method to list processes or export csv file in adm page
     def get(self,  *args, **kwargs):
         list_process = super().get(*args, **kwargs)
         qs = self.get_queryset()
-        file = self.export(qs)
-        if self.request.GET.get('export'):
+        request_export = self.request.GET.get('export')
+        if request_export:
+            file = export_csv(qs)
             return file
         return list_process
 
@@ -234,9 +120,9 @@ class ProcessList(ListView):
         qs = super().get_queryset(*args, **kwargs)
         if search:
             qs = qs.filter(Q(
-                Q(number__icontains=search) |
-                Q(court__icontains=search) | Q(forum__icontains=search) |
-                Q(judge__name__icontains=search) | Q(class_process__icontains=search) |
+                Q(number__icontains=search) | Q(court__icontains=search) |
+                Q(forum__icontains=search) | Q(judge__name__icontains=search) |
+                Q(class_process__icontains=search) |
                 Q(subject__icontains=search) | Q(organ__icontains=search) |
                 Q(area__icontains=search) | Q(county__icontains=search)
 
@@ -246,5 +132,46 @@ class ProcessList(ListView):
 
     def get_context_data(self, *args, **kwargs):
         ctx = super().get_context_data(*args, **kwargs)
-        ctx.update({"active": 1, 'tag': 'Processo', })
+        ctx.update({"active": 1})
         return ctx
+
+
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
+class ProcessDeleteView(View):
+
+    def get(self, request, *args, **kwargs):
+        part = Process.objects.filter(id=kwargs.get('pk')).first()
+        if part:
+            messages.success(request, 'Processo deletado com sucesso')
+            part.delete()
+        else:
+            messages.error(request, 'Erro ao tentar deletar')
+            raise Http404()
+
+        return redirect('process:list')
+
+
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
+class ShutDownPart(View):
+    # method to shut down part of its respective process. OBS: this method
+    # dont delete part, just remove of many to many relationship
+    def get(self, request, id=None, idPart=None):
+        # get process
+        process = Process.objects.filter(id=id).first()
+
+        # if process not is null, then get part,
+        # remove of relationship, and redirect to process detail page
+        if process != None:
+            part = process.parts.get(id=idPart)
+            movement = Movement.objects.filter(process=process)
+            movement.delete()
+            process.parts.remove(part)
+            messages.success(
+                self.request, 'Parte desligada com sucesso com sucesso')
+        return redirect('process:detail', id)

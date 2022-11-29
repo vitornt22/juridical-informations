@@ -21,6 +21,6 @@ class PartForm(forms.ModelForm):
 
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': ' Nome Completo',  'class': 'form-control'}),  # noqa
-            'cpf': forms.NumberInput(attrs={'placeholder': ' CPF',  'class': 'form-control',  'maxlength': "14", 'mask': '999.999.999-99'}),  # noqa
+            'cpf': forms.TextInput(attrs={'placeholder': ' CPF',  'class': 'form-control',  'maxlength': "14", 'data-mask': '999.999.999-99'}),  # noqa
             'category': forms.TextInput(attrs={'placeholder': ' Categoria ',  'class': 'form-control'}),  # noqa
         }

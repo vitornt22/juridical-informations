@@ -56,6 +56,8 @@
         <!-- Search form -->
        {% block searchInput %}
        {% endblock searchInput %}
+       <a href="{% url 'process:searchProcess'  %}" type="button" class="btn input-group-text border-0">Home</a>
+
         {% block button %}
         
         {% endblock button %}
@@ -104,6 +106,8 @@
   integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
   crossorigin="anonymous"></script>
   <script src="{%static 'js/virtual-select.min.js' %}"></script>
+  <script src="{%static 'js/jquery.mask.min.js' %}"></script>
+
   <script>
     var ob = document.getElementById("{{active}}");
     ob.classList.add("active");

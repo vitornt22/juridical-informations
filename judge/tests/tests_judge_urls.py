@@ -13,13 +13,13 @@ class JudgeUrlsTest(TestCase):
         self.assertEqual(url_list, '/juizes/')
 
     def test_judge_register_url_is_correct(self):
-        url_register = reverse('judge:register', kwargs={'path': 'processo'})
-        self.assertEqual(url_register, '/processo/novo/juiz/')
+        url_register = reverse('judge:RegisterJudge')
+        self.assertEqual(url_register, '/juiz/registrarJuiz')
 
     def test_judge_detail_url_is_correct(self):
-        url_detail = reverse('judge:detail', kwargs={'id': 1})
-        self.assertEqual(url_detail, '/Editar/juiz/1/')
+        url_detail = reverse('judge:detail', kwargs={'pk': 1})
+        self.assertEqual(url_detail, '/juiz/Editar/1/')
 
     def test_judge_delete_url_is_correct(self):
-        url_delete = reverse('judge:delete', kwargs={'id': 1})
+        url_delete = reverse('judge:delete', kwargs={'pk': 1})
         self.assertEqual(url_delete, '/juiz/deletar/1/')

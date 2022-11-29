@@ -18,6 +18,13 @@
 {% endblock %}
 
 {%block content%}
+
+{% if processes|length == 0  %}
+<div class="col-md-3 m-auto ">
+<h5 style="color:red;"> Não há resultados</h5>
+<div class="p-3"></div>
+</div>
+{% endif %}
 <table class="table table-stripped">
     <tbody>
       <tr>

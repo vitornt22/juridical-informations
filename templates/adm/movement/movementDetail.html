@@ -14,7 +14,7 @@
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form method="POST" action="{%url 'movement:detail' idProcess id %}" enctype="multipart/form-data">
+        <form method="POST" action="{%url 'movement:detail' idProcess object.id %}" enctype="multipart/form-data">
           {% csrf_token %}
 
           <div class="card-body">

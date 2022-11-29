@@ -9,8 +9,6 @@ from django.views.generic.list import ListView
 
 from process.models import Process
 
-from .admin_processes_views import ProcessDelete, ProcessDetails, ProcessList
-
 
 # Class view to home render home page
 class Home(View):

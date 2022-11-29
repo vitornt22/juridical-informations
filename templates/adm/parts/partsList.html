@@ -9,12 +9,17 @@
 {% endblock searchInput %}
 
 {%block button%}
-<form method="GET" class="d-none d-md-flex input-group w-auto my-auto">
   <button data-toggle="modal" data-target="#exampleModalCenter"  type="button" class="btn input-group-text border-0">Cadastrar Parte</button>
-</form>
 {% endblock %}
 
 {%block content%}
+
+{% if parts|length == 0  %}
+<div class="col-md-3 m-auto ">
+<h5 style="color:red;"> Não há resultados</h5>
+<div class="p-3"></div>
+</div>
+{% endif %}
 <table class="table table-stripped">
     <tbody>
       <tr>

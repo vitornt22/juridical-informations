@@ -8,7 +8,11 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form method="POST" action="{%url 'part:processPartRegister'  %}">
+        {% if  object == None%}
+        <form method="POST" action="{%url partPath   %}">
+          {% else %}
+        <form method="POST" action="{%url partPath object.id  %}">
+        {% endif %}
         {% csrf_token %}
         <div class="modal-body">
             {{partForm}}

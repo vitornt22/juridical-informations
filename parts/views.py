@@ -2,13 +2,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.http import Http404
 from django.http.response import Http404
 from django.shortcuts import redirect, render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 
 from judge.forms import JudgeForm
@@ -19,6 +20,44 @@ from .forms import PartForm
 from .models import Part
 
 
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
+class PartUpdateView(UpdateView):
+    model = Part
+    form_class = PartForm
+    template_name = 'adm/parts/partDetail.html'
+    success_url = 'part:detail'
+
+    def get_context_data(self,  **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['idP'] = self.kwargs.get('idP')
+        context['path'] = 'process:detail' if context['idP'] is not None else 'part:list'
+        return context
+
+    def form_valid(self, form):
+        part = form.save(commit=False)
+        part.save()
+        messages.success(self.request, 'Parte registrada com sucess')
+
+    def post(self, request, *args, **kwargs):
+        super().post(request, *args, **kwargs)
+        idP = self.kwargs.get('idP')
+        pk = self.kwargs.get('pk')
+
+        if idP is None:
+            print("IP= NONE")
+            return redirect('part:list')
+        else:
+            print('entra aqui')
+            return redirect('part:processDetailEditPart', idP=idP, pk=pk)
+
+
+@method_decorator(
+    login_required(login_url='process:loginPage', redirect_field_name='next'),
+    name='dispatch'
+)
 class PartCreateView(CreateView):
     model = Part
     form_class = PartForm
@@ -26,122 +65,44 @@ class PartCreateView(CreateView):
     success_url = 'process:register'
 
     def form_valid(self, form):
+        print("FORM DATA ", form.data)
+
         part = form.save(commit=False)
-        if Part.objects.filter(cpf=part.cpf):
-            messages.error(self.request, 'CNJ existente, tente novamente')
         part.save()
         messages.success(self.request, 'Parte registrada com sucess')
-        if self.request.path == '/process/partes/registrar/':
-            print('ola')
+
+    def form_invalid(self, form):
+        part = form.data['cpf']
+        if Part.objects.filter(cpf=part).exists():
+            messages.error(self.request, 'CNJ existente, tente novamente')
+        else:
+            messages.error(self.request, 'Erro ao tentar registrar')
+
+    def post(self, request, * args, **kwargs):
+        super().post(request, *args, **kwargs)
+        if self.request.path == '/processo/partes/registrar/':
             return redirect('process:register')
-        return super().form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = ProcessForm()
-        context['partForm'] = PartForm()
-        context['judgeForm'] = PartForm()
-        return context
-
-    def post(self, request, *args, **kwargs):
-        post = super().post(request, *args, **kwargs)
-        return post
+        elif 'processo/detalhes/' in self.request.path:
+            id = self.kwargs.get('id')
+            return redirect('process:detail', id)
+        else:
+            return redirect('part:list')
 
 
 @method_decorator(
     login_required(login_url='process:loginPage', redirect_field_name='next'),
     name='dispatch'
 )
-class PartDetails(View):
-
-    # render request template
-    def render_part(self, form, html, id, idP):
-        active = 2
-        path = 'part:list'
-        # if id process is not None, set path with value to redirect
-        # to process detail  page, when click back button on html template
-        if idP is not None:
-            path = 'process:detail'
-            active = 1
-        context = {'form': form,
-                   'active': active, 'tag': 'Projeto',
-                   'back': 'part:list',
-                   'id': id, 'idP': idP, 'path': path}
-        return render(self.request, html, context)
-
-    # get  instance of part if it exists
-    def get_part(self, id=None):
-        part = None
-        if id is not None:
-            part = Part.objects.filter(
-                pk=id
-            ).first()
-
-            if not part:
-                raise Http404()
-        print("MYY PARTTTTTT")
-        return part
-
-    # GET method
-    def get(self, request, id=None, editId=None, idP=None):
-        html = 'adm/parts/processRegister.html' if id is None else 'adm/parts/partDetail.html'
-        part = self.get_part(id)
-        form = PartForm(instance=part or None)
-        return self.render_part(form, html, id, idP)
-
-    # POST method
-    def post(self, request, id=None, path=None,  idP=None):
-        part = self.get_part(id)
-        form = PartForm(request.POST, request.FILES, instance=part)
-
-        cpf = form.data['cpf']
-        if Part.objects.filter(cpf=cpf).exists:
-            messages.error(request, 'CPF existente, tente novamente')
-
-        if form.is_valid():
-            # now form is valid and i can to save it
-            p = form.save(commit=False)
-            # now i can make changes in object edited
-            p.save()
-
-            # check is post is to creat or edit part, and send message to  request template
-            if id is not None:
-                messages.success(
-                    request, 'Parte  Editada  com sucesso!')
-            else:
-                messages.success(
-                    request, 'Parte Cadastrada com sucesso!')
-
-        # check if post is to create or edit
-        if id is None:
-            # if request was been made in process page, redirect to this same page
-            # else, redirect to list parts page
-            if path == 'processo':
-                print('MY PATH', request.path)
-                return redirect('process:register')
-            elif 'edit' in path:
-                idProcess = int(path.replace('editar', ''))
-                print("ID PROCESS", idProcess)
-                return redirect('process:detail', idProcess)
-            else:
-                return redirect('part:list')
-
-        print('chegando ate aqui')
-        html = 'adm/parts/partDetail.html'
-        return self.render_part(form, html, id, idP)
-
-
-@method_decorator(
-    login_required(login_url='process:loginPage', redirect_field_name='next'),
-    name='dispatch'
-)
-class PartDelete(PartDetails):
-    # method to delete part instance
-    def get(self, request, id=None):
-        part = self.get_part(id)
-        name = part.category+': ' + part.name
-        part.delete()
-        messages.success(self.request, 'Deletado com sucesso')
+class PartDeleteView(View):
+    # specify the model you want to use
+    def get(self, request, pk=None, * args, **kwargs):
+        part = Part.objects.filter(id=pk).first()
+        if part:
+            messages.success(request, 'Parte deletada com sucesso')
+            part.delete()
+        else:
+            messages.error(request, 'Erro ao tentar deletar')
+            raise Http404()
         return redirect('part:list')
 
 
@@ -149,7 +110,7 @@ class PartDelete(PartDetails):
     login_required(login_url='process:loginPage', redirect_field_name='next'),
     name='dispatch'
 )
-class PartList(ListView):
+class PartListView(ListView):
     model = Part
     context_object_name = 'parts'
     ordering = ['-id']
@@ -171,6 +132,7 @@ class PartList(ListView):
     def get_context_data(self, *args, **kwargs):
         partForm = PartForm()
         ctx = super().get_context_data(*args, **kwargs)
+        ctx['partPath'] = 'part:register'
         ctx.update({"active": 2, 'tag': 'Parto',
                    'path': 'list', 'partForm': partForm})
         return ctx

@@ -7,9 +7,9 @@ from . import views
 app_name = 'movement'
 urlpatterns = [
     path('registrarMovimentacao/<int:idProcess>/',
-         views.MovementDetails.as_view(), name='register'),
-    path('editar/Movimentacao/<int:idProcess>/<int:id>/',
-         views.MovementDetails.as_view(), name='detail'),
-    path('movimentacao/deletar/<int:id>/',
-         views.MovementDelete.as_view(), name='delete')
+         views.MovementCreateView.as_view(), name='register'),
+    path('editar/Movimentacao/<int:idProcess>/<int:pk>/',
+         views.MovementUpdateView.as_view(), name='detail'),
+    path('movimentacao/deletar/<int:pk>/',
+         views.MovementDeleteView.as_view(), name='delete')
 ]

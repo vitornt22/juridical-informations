@@ -14,7 +14,7 @@
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-        <form method="POST" action="{%url 'judge:detail' id %}" enctype="multipart/form-data">
+        <form method="POST" action="{%url 'judge:detail' object.id %}" enctype="multipart/form-data">
           {% csrf_token %}
 
           <div class="card-body">

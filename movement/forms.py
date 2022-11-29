@@ -12,7 +12,7 @@ from .models import Movement
 class MovementForm(forms.ModelForm):
 
     date = forms.DateField(label="Data", required=False, input_formats=settings.DATE_INPUT_FORMATS,
-                           widget=forms.DateInput(format="%d/%m/%Y", attrs={'readOnly': False, 'id': 'startLocationID', 'data-mask': '99/99/9999'}))
+                           widget=forms.DateInput(format="%d/%m/%Y", attrs={'readOnly': False, 'class': 'form-control', 'id': 'startLocationID', 'data-mask': '99/99/9999'}))
 
     class Meta:
         model = Movement
@@ -24,5 +24,5 @@ class MovementForm(forms.ModelForm):
         }
 
         widgets = {
-            'description': forms.Textarea(attrs={'placeholder': ' CPF',  'class': 'form-control',  'maxlength': "500"}),  # noqa
+            'description': forms.Textarea(attrs={'placeholder': ' Descrição',  'class': 'form-control',  'maxlength': "500"}),  # noqa
         }

@@ -7,9 +7,14 @@ from . import views
 app_name = 'judge'
 urlpatterns = [
     path('juizes/', views.JudgeList.as_view(), name='list'),
-    path('<str:path>/novo/juiz/', views.JudgeDetails.as_view(), name='register'),
+    path('juiz/Editar/<int:pk>/', views.JudgeUpdateView.as_view(), name='detail'),
+    # register urls
+    path('juiz/registrarJuiz',
+         views.JudgeCreateView.as_view(), name='RegisterJudge'),
     path('processo/juiz/registrar', views.JudgeCreateView.as_view(),
          name='registerProcessJudge'),
-    path('Editar/juiz/<int:id>/', views.JudgeDetails.as_view(), name='detail'),
-    path('juiz/deletar/<int:id>/', views.JudgeDelete.as_view(), name='delete')
+    path('processo/detalhes/<int:id>/registrarJuiz',
+         views.JudgeCreateView.as_view(), name='processDetailJudge'),
+    # delete urls
+    path('juiz/deletar/<int:pk>/', views.JudgeDeleteView.as_view(), name='delete')
 ]

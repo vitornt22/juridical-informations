@@ -15,7 +15,8 @@ def login(self):
 
 
 def createJudge():
-    Judge.objects.create(name='judge', cnj='123')
+    judge = Judge.objects.create(name='judge', cnj='123')
+    return judge
 
 
 class JudgeViewsTest(TestCase):
@@ -27,16 +28,20 @@ class JudgeViewsTest(TestCase):
         self.assertIs(view.func.view_class, views.JudgeList)
 
     def test_judge_register_views_function_is_correct(self):
-        view = resolve(reverse('judge:register', kwargs={'path': 'process'}))
-        self.assertIs(view.func.view_class, views.JudgeDetails)
+        view = resolve(reverse('judge:RegisterJudge'))
+        self.assertIs(view.func.view_class, views.JudgeCreateView)
+
+    def test_judge_register_in_process_page_views_function_is_correct(self):
+        view = resolve(reverse('judge:registerProcessJudge'))
+        self.assertIs(view.func.view_class, views.JudgeCreateView)
 
     def test_judge_detail_views_function_is_correct(self):
-        view = resolve(reverse('judge:detail', kwargs={'id': 1}))
-        self.assertIs(view.func.view_class, views.JudgeDetails)
+        view = resolve(reverse('judge:detail', kwargs={'pk': 1}))
+        self.assertIs(view.func.view_class, views.JudgeUpdateView)
 
     def test_judge_delete_views_function_is_correct(self):
-        view = resolve(reverse('judge:delete', kwargs={'id': 1}))
-        self.assertIs(view.func.view_class, views.JudgeDelete)
+        view = resolve(reverse('judge:delete', kwargs={'pk': 1}))
+        self.assertIs(view.func.view_class, views.JudgeDeleteView)
 
     # tests status codes views
 
@@ -46,32 +51,52 @@ class JudgeViewsTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_judge_register_views_function_is_status_code_200_founded(self):
-        login(self)
-        response = self.client.get(
-            reverse('judge:register', kwargs={'path': ''}))
+        response = self.client.post(
+            reverse('judge:RegisterJudge'), {'name': "teste123", 'cnj': "234232"}, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_judge_register_views_in_process_register_page_function_is_status_code_200_founded(self):
+        response = self.client.post(
+            reverse('judge:registerProcessJudge'), {'name': "teste123", 'cnj': "234232"}, follow=True)
         self.assertEqual(response.status_code, 200)
 
     def test_judge_delete_views_function_is_status_code_200_founded(self):
         response = self.client.get(
-            reverse('judge:delete', kwargs={'id': 1}), follow=True)
+            reverse('judge:delete', kwargs={'pk': 1}), follow=True)
         self.assertEqual(response.status_code, 200)
+
+    def test_create_view_judge_in_register_process_page_status_code(self):
+        post = self.client.post(
+            reverse('judge:registerProcessJudge'), {'name': "teste123", 'cnj': "234232"}, follow=True)
+        self.assertEqual(post.status_code, 200)
 
     # Exists Judge tests
 
     def test_status_code_200_ok_in_judge_that_exists(self):
         login(self)
         createJudge()
-        response = self.client.get('/Editar/juiz/1/')
+        response = self.client.get('/juiz/Editar/1/')
         self.assertEqual(response.status_code, 200)
 
     def test_404_in_jugde_that_no_exists(self):
-        # Or this:
-       # client.login(username=username, password=password)
-        login(self)
         response = self.client.get('/Editar/juiz/1000/')
         self.assertEqual(response.status_code, 404)
 
-    # CHANGE HERE
+    # create view redirects
+
+    def test_redirect_create_view_register_judge(self):
+        login(self)
+        post = self.client.post(
+            reverse('judge:RegisterJudge'), {'name': "teste123", 'cnj': "234232"}, follow=True)
+        self.assertRedirects(post, reverse('judge:list'))
+
+    def test_redirect_create_view_register_judge_in_process_register_page(self):
+        login(self)
+        post = self.client.post(
+            reverse('judge:registerProcessJudge'), {'name': "teste123", 'cnj': "234232"}, follow=True)
+        self.assertRedirects(post, reverse('process:register'))
+
+    # test template views
 
 
 '''

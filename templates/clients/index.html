@@ -43,10 +43,19 @@
             <li class="nav-item">
               <a href="{%url 'process:searchProcess'  %}" class="nav-link">Processos</a>
             </li>
-            
+            {% if  request.user.is_authenticated %}
+            <li class="nav-item">
+              <a href="{%url 'process:list'  %}" class="nav-link">Administração</a>
+            </li>
+            <li class="nav-item">
+              <a href="{%url 'process:logout'  %}" class="nav-link">Logout</a>
+            </li>
+            {% else %}
             <li class="nav-item">
               <a href="{%url 'process:loginPage' %}" class="btn btn-outline-light ml-4">Entrar</a>
             </li>
+            {% endif %}
+           
           </ul>
         </div>
 
