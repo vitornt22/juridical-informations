@@ -81,8 +81,9 @@ def set_tags(tags):
     # create Model judeg to assign in model process
     judge = register_judge(list2[0])
     distribution = datetime.strptime(str(list2[1]), '%d/%m/%Y').date()
-
-    try:
+    if Process.objects.filter(number=number_process).exists():
+        return False
+    else:
         process = Process(
             number=number_process,
             class_process=list1[0],
@@ -100,17 +101,15 @@ def set_tags(tags):
 
         process.save()
 
-        # ADD PROCESS HERE
         register_part(tags[3], process)
         register_movement(tags[4], process)
 
         process.save()
         return True
-    except:
-        return False
 
 
 def register_process(file):
     obj = BeautifulSoup(file.read(), "html.parser")
     split = obj.find_all('div', {"class": "row"})[:5]
-    set_tags(split)
+    value = set_tags(split)
+    return value

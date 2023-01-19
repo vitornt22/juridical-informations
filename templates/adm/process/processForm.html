@@ -7,7 +7,7 @@
     <div class="col-lg-6 form-group">
       <label>Selecionar Partes</label>
   
-      <select required id="multipleSelect"  name="parts" class="" multiple name="native-select" placeholder="Selecionar Partes" data-search="true" data-silent-initial-value-set="true">
+      <select  id="multipleSelect"  name="parts" class="" multiple name="native-select" placeholder="Selecionar Partes" data-search="true" data-silent-initial-value-set="true">
         {%for i in parts %}
             <option value={{i.id}}>{{i}}</option>
           {%endfor%}
