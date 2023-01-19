@@ -1,16 +1,10 @@
 # Create your views here.
-# flake8: noqa
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.http import Http404
-from django.http.response import Http404
-from django.shortcuts import redirect, render
-from django.urls import reverse
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, UpdateView
 
 from process.models import Process
 
@@ -69,7 +63,6 @@ class MovementUpdateView(UpdateView):
     def form_valid(self, form):
         movement = form.save(commit=False)
         movement.save()
-        id = self.kwargs.get('pk')
         messages.success(self.request, 'Dados Editados')
         return redirect('process:detail', movement.process.id)
 

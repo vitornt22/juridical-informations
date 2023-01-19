@@ -1,14 +1,10 @@
-# flake8: noqa
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import Http404
-from django.http.response import Http404
-from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 
@@ -33,6 +29,7 @@ class PartUpdateView(UpdateView):
     def get_context_data(self,  **kwargs):
         context = super().get_context_data(**kwargs)
         context['idP'] = self.kwargs.get('idP')
+        # flake8
         context['path'] = 'process:detail' if context['idP'] is not None else 'part:list'
         return context
 
@@ -43,15 +40,14 @@ class PartUpdateView(UpdateView):
 
     def post(self, request, *args, **kwargs):
         super().post(request, *args, **kwargs)
-        idP = self.kwargs.get('idP')
+        id_process = self.kwargs.get('idP')
         pk = self.kwargs.get('pk')
 
-        if idP is None:
-            print("IP= NONE")
+        if id_process is None:
             return redirect('part:list')
         else:
-            print('entra aqui')
-            return redirect('part:processDetailEditPart', idP=idP, pk=pk)
+            return redirect('part:processDetailEditPart',
+                            idP=id_process, pk=pk)
 
 
 @method_decorator(
@@ -65,8 +61,6 @@ class PartCreateView(CreateView):
     success_url = 'process:register'
 
     def form_valid(self, form):
-        print("FORM DATA ", form.data)
-
         part = form.save(commit=False)
         part.save()
         messages.success(self.request, 'Parte registrada com sucess')
@@ -130,9 +124,9 @@ class PartListView(ListView):
         return qs
 
     def get_context_data(self, *args, **kwargs):
-        partForm = PartForm()
+        part_form = PartForm()
         ctx = super().get_context_data(*args, **kwargs)
         ctx['partPath'] = 'part:register'
         ctx.update({"active": 2, 'tag': 'Parto',
-                   'path': 'list', 'partForm': partForm})
+                   'path': 'list', 'partForm': part_form})
         return ctx

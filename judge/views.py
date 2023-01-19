@@ -54,7 +54,6 @@ class JudgeCreateView(CreateView):
 
     def form_valid(self, form):
         judge = form.save(commit=False)
-        print(judge.cnj)
         if Judge.objects.filter(cnj=judge.cnj).exists():
             messages.error(self.request, 'CNJ existente, tente novamente')
         else:

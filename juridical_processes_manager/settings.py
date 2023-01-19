@@ -129,7 +129,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
+
 
 USE_I18N = True
 
@@ -154,6 +155,6 @@ LOGIN_REDIRECT_URL = '/login'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 USE_L1ON = True
-DATE_INPUT_FORMATS = ('%d/%m/%Y',)
+DATE_INPUT_FORMATS = ('%d/%m/%Y', 'YYYY-mm-dd', 'dd/mm/YYYY')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

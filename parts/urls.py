@@ -19,5 +19,6 @@ urlpatterns = [
     path('processo/partes/registrar/',
          views.PartCreateView.as_view(), name='processPartRegister'),
     # delete urls
-    path('deletar/<int:pk>/', views.PartDeleteView.as_view(), name='delete')
+    path('deletar/<int:pk>/', views.PartDeleteView.as_view(), name='delete'),
+
 ]

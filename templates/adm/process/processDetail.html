@@ -51,6 +51,56 @@
     <div  class="col-md-5">
       <div  style="min-height:32rem; max-height:60rem;" class="card card-lightblue">
         <div class="card-header">
+          <h3 class="card-title">Partes</h3>
+        </div>
+        <div class="card-body">
+
+       
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Nome</th>
+              <th scope="col">Categoria</th>
+              <th scope="col">CPF</th>
+              <th scope="col"></th>
+              <th scope="col"></th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in myParts  %}
+            <tr class="">
+              <th scope="row"></th>
+              <td>{{i.name}}</td>
+              <td style="word-break: break-word;">{{i.category}}</td>
+              <td style="word-break: break-word;">{{i.cpf}}</td>
+              <td><a href="{%url 'part:processDetailEditPart' object.id i.id%}" style="color:#FFF;" class="btn btn-primary">Editar</a></td>
+              <td><a href="{%url 'process:shutdown' object.id i.id %}" style="color:#FFF;" class="btn btn-danger">Remover</td>
+
+
+            </tr>
+            {% endfor %}
+            
+           
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer">
+
+      </div>
+      </div>
+    </div>
+    
+   
+  </div>
+  <div class="row">
+    <div  class="col-md-7">
+    </div>
+
+    <div  class="col-md-5">
+      <div  style="min-height:32rem; max-height:60rem;" class="card card-lightblue">
+        <div class="card-header">
           <h3 class="card-title">Movimentações</h3>
         </div>
        
@@ -90,55 +140,6 @@
         <button style="color:#FFF;" type="submit" class="btn bg-success" data-toggle="modal" data-target="#movementModal" 
         >Adicionar Movimentação
       </button>
-      </div>
-      </div>
-    </div>
-   
-  </div>
-  <div class="row">
-    <div  class="col-md-7">
-    </div>
-
-    <div  class="col-md-5">
-      <div  style="min-height:32rem; max-height:60rem;" class="card card-lightblue">
-        <div class="card-header">
-          <h3 class="card-title">Partes</h3>
-        </div>
-        <div class="card-body">
-
-       
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col"></th>
-              <th scope="col">Nome</th>
-              <th scope="col">Categoria</th>
-              <th scope="col">CPF</th>
-              <th scope="col"></th>
-              <th scope="col"></th>
-
-            </tr>
-          </thead>
-          <tbody>
-            {% for i in myParts  %}
-            <tr class="">
-              <th scope="row"></th>
-              <td>{{i.name}}</td>
-              <td style="word-break: break-word;">{{i.category}}</td>
-              <td style="word-break: break-word;">{{i.cpf}}</td>
-              <td><a href="{%url 'part:processDetailEditPart' object.id i.id%}" style="color:#FFF;" class="btn btn-primary">Editar</a></td>
-              <td><a href="{%url 'process:shutdown' object.id i.id %}" style="color:#FFF;" class="btn btn-danger">Remover</td>
-
-
-            </tr>
-            {% endfor %}
-            
-           
-          </tbody>
-        </table>
-      </div>
-      <div class="card-footer">
-
       </div>
       </div>
     </div>

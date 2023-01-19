@@ -28,13 +28,16 @@
 </div>
 
 <div class="row">
-<div class="col-lg-4 form-group">
+  <div class="col-lg-3 form-group">
+    {{form.number|as_crispy_field}}
+  </div>
+<div class="col-lg-3 form-group">
   {{form.area|as_crispy_field}}
 </div>
-  <div class="col-lg-4 form-group">
+  <div class="col-lg-3 form-group">
     {{form.court|as_crispy_field}}
   </div>
-  <div class="col-lg-4 form-group">
+  <div class="col-lg-3 form-group">
     {{form.controll|as_crispy_field}}
   </div>
  

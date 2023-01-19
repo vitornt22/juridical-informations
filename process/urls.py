@@ -26,6 +26,8 @@ urlpatterns = [
     path('deletar/Processo/<int:pk>/',
          views.ProcessDeleteView.as_view(), name='delete'),
     path('desligarParte/<int:id>/<int:idPart>',
-         views.ShutDownPart.as_view(), name='shutdown')
+         views.ShutDownPart.as_view(), name='shutdown'),
+    path('cadastrar/arquivo/', views.registerWithFile, name='register_file')
+
 
 ]

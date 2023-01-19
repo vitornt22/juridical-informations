@@ -9,18 +9,7 @@ from process.models import Process
 
 def redirect_part_register(self):
     if self.request.path == '/process/partes/registrar/':
-        print('ola')
         return redirect('process:register')
-
-
-def generate_number_process(self):
-    verify = True
-    number = 0
-    while (verify):
-        number = randint(100000, 999999)
-        if Process.objects.filter(number=number).exists() is False:
-            verify = False
-    return number
 
 
 def addParts(self, process):

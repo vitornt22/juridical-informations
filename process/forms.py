@@ -13,10 +13,11 @@ class ProcessForm(forms.ModelForm):
 
     class Meta:
         model = Process
-        exclude = ['number']
+        fields = '__all__'
 
         labels = {
             'class_process': 'Classe',
+            'number': 'Nº do Processo',
             'court': 'Vara',
             'forum': 'Foro',
             'subject': 'Assunto',
@@ -30,6 +31,7 @@ class ProcessForm(forms.ModelForm):
 
         widgets = {
                'id': forms.HiddenInput(),
+               'number': forms.TextInput(attrs={'placeholder': ' Nº do Processo',  'class': 'form-control',  'maxlength': "25", 'data-mask': '9999999-99.9999.9.99.9999'}),  # noqa
                'class_process': forms.TextInput(attrs={'placeholder': ' Classe',  'class': 'form-control', 'class': 'form-control'}),  # noqa
                'court': forms.TextInput(attrs={'placeholder': ' Vara',  'class': 'form-control'}),  # noqa
                'forum': forms.TextInput(attrs={'placeholder': ' Foro',  'class': 'form-control'}),  # noqa

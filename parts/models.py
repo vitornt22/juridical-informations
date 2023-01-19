@@ -10,7 +10,6 @@ class Part (models.Model):
     process = models.ManyToManyField(
         Process, related_name='parts', blank=True)
     name = models.CharField(max_length=100)
-    cpf = models.CharField(max_length=14, unique=True)
     category = models.CharField(max_length=30)
 
     def __str__(self):

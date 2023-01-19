@@ -22,7 +22,8 @@ from parts.models import Part
 from process.forms import ProcessForm
 from process.models import Process
 from utils.export_csv import export_csv
-from utils.process_create_functions import addParts, generate_number_process
+from utils.process_create_functions import addParts
+from utils.web_scrapping import register_process
 
 
 @method_decorator(
@@ -57,7 +58,6 @@ class ProcessUpdateView(UpdateView):
     def form_valid(self, form):
         process = form.save(commit=False)
         addParts(self, process)
-        process.number = generate_number_process(self)
         messages.success(self.request, 'Processso Alterado com sucesso')
         id = self.kwargs.get('pk')
         return redirect('process:detail', id)
@@ -78,7 +78,6 @@ class ProcessCreateView(CreateView):
     def form_valid(self, form):
         process = form.save(commit=False)
         addParts(self, process)
-        process.number = generate_number_process(self)
         messages.success(self.request, 'Processo registrado com sucesso!')
         process.save()
         return redirect('process:register')
@@ -163,7 +162,7 @@ class ShutDownPart(View):
     # dont delete part, just remove of many to many relationship
     def get(self, request, id=None, idPart=None):
         # get process
-        process = Process.objects.filter(id=id).first()
+        process = Process.objects.get(id=id)
 
         # if process not is null, then get part,
         # remove of relationship, and redirect to process detail page
@@ -175,3 +174,16 @@ class ShutDownPart(View):
             messages.success(
                 self.request, 'Parte desligada com sucesso com sucesso')
         return redirect('process:detail', id)
+
+
+@login_required(login_url='process:loginPage', redirect_field_name='next')
+def registerWithFile(request):
+    file = request.FILES['file']
+    value = register_process(file)
+    if value == True:
+        messages.success(request, 'Processo Cadastrado com Sucesso ! ')
+        return redirect('process:list')
+    else:
+        messages.error(
+            request, 'Erro ao tentar cadastrar.Arquivo inválido ou o Processo  já está Cadastrado')
+        return redirect('process:register')
