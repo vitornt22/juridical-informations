@@ -96,5 +96,3 @@ local_settings.py
 _local_settings.py
 gunicorn-error-log
 static/
-
-# Add again for course purpose
