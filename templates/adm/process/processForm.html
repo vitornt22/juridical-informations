@@ -5,13 +5,15 @@
    {{form.judge|as_crispy_field}}     
   </div>
     <div class="col-lg-6 form-group">
-      <label>Selecionar Partes</label>
+     <!--<label>Selecionar Partes</label>
   
       <select  id="multipleSelect"  name="parts" class="" multiple name="native-select" placeholder="Selecionar Partes" data-search="true" data-silent-initial-value-set="true">
         {%for i in parts %}
             <option value={{i.id}}>{{i}}</option>
           {%endfor%}
-      </select>                      
+      </select>    
+    -->
+    {{form.parts|as_crispy_field}}                  
     </div>
   </div>
 

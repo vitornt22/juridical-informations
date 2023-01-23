@@ -47,7 +47,55 @@
 {%endblock content%}
 
 {%block addScript%}
+
+     
+
 <script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#id_judge').select2({
+            ajax: {
+                url: '{% url 'process:register' %}',
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {id: item.id, text: item.name};
+                        })
+                    };
+                }
+            },
+            minimumInputLength: 1
+        });
+    });
+
+    $(document).ready(function () {
+      $('#id_parts').select2({
+          multiple:true,
+          ajax: {
+              url: '{% url 'process:register' %}',
+              dataType: 'json',
+              data: function (params) {
+                var query = {
+                  search: params.term,
+                  type: 'public'
+                }
+          
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+              },
+              processResults: function (data) {
+                  return {
+                      results: $.map(data, function (item) {
+                          return {id: item.id, text: item.name};
+                      })
+                  };
+              }
+          },
+          minimumInputLength: 1
+      });
+  });
+
 
   VirtualSelect.init({
     ele: '#multipleSelect',

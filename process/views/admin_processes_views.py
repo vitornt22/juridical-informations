@@ -3,8 +3,9 @@ from random import randint
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -22,7 +23,7 @@ from parts.models import Part
 from process.forms import ProcessForm
 from process.models import Process
 from utils.export_csv import export_csv
-from utils.process_create_functions import addParts
+from utils.process_create_functions import consult_registered_data
 from utils.web_scrapping import register_process
 
 
@@ -36,10 +37,20 @@ class ProcessUpdateView(UpdateView):
     template_name = 'adm/process/processDetail.html'
     success_url = 'process:detail'
 
+    def get(self, request, *args: str, **kwargs):
+        a = super().get(request, *args, **kwargs)
+        # struct to dont load all objects Judges and Parts
+        response_content = consult_registered_data(request)
+        if response_content:
+            return JsonResponse(response_content, safe=False)
+
+        return a
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         process = context['process']
-        context['movements'] = Movement.objects.filter(process=process)
+        context['movements'] = Movement.objects.filter(
+            process=process).order_by('-date')
         context['movementForm'] = MovementForm()
         context['partForm'] = PartForm()
         context['active'] = 1
@@ -57,7 +68,11 @@ class ProcessUpdateView(UpdateView):
 
     def form_valid(self, form):
         process = form.save(commit=False)
-        addParts(self, process)
+        process.save()
+        lista = self.request.POST.getlist('parts')
+        process.parts.clear()
+        process.parts.add(*[int(i)
+                          for i in lista])
         messages.success(self.request, 'Processso Alterado com sucesso')
         id = self.kwargs.get('pk')
         return redirect('process:detail', id)
@@ -75,28 +90,42 @@ class ProcessCreateView(CreateView):
     template_name = 'adm/process/processRegister.html'
     success_url = 'process:list'
 
+    def get(self, request, *args: str, **kwargs):
+        a = super().get(request, *args, **kwargs)
+
+        # struct to dont load all objects Judges and Parts
+        response_content = consult_registered_data(request)
+        if response_content:
+            return JsonResponse(response_content, safe=False)
+
+        return a
+
     def form_valid(self, form):
         process = form.save(commit=False)
-        addParts(self, process)
         messages.success(self.request, 'Processo registrado com sucesso!')
         process.save()
+        process.parts.add(*[int(i)
+                          for i in self.request.POST.getlist('parts')])
+
         return redirect('process:register')
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
         context['parts'] = Part.objects.all()
         context['active'] = 1
         context['partForm'] = PartForm()
         context['judgeForm'] = JudgeForm()
-        context['judges'] = Judge.objects.all()
         context['partPath'] = 'part:processPartRegister'
         context['judgePath'] = 'judge:registerProcessJudge'
         return context
 
 
-@method_decorator(
+@ method_decorator(
     login_required(login_url='process:loginPage', redirect_field_name='next'),
     name='dispatch'
+
+
 )
 class ProcessList(ListView):
     model = Process
@@ -135,7 +164,7 @@ class ProcessList(ListView):
         return ctx
 
 
-@method_decorator(
+@ method_decorator(
     login_required(login_url='process:loginPage', redirect_field_name='next'),
     name='dispatch'
 )
@@ -153,7 +182,7 @@ class ProcessDeleteView(View):
         return redirect('process:list')
 
 
-@method_decorator(
+@ method_decorator(
     login_required(login_url='process:loginPage', redirect_field_name='next'),
     name='dispatch'
 )
@@ -168,15 +197,13 @@ class ShutDownPart(View):
         # remove of relationship, and redirect to process detail page
         if process != None:
             part = process.parts.get(id=idPart)
-            movement = Movement.objects.filter(process=process)
-            movement.delete()
             process.parts.remove(part)
             messages.success(
                 self.request, 'Parte desligada com sucesso com sucesso')
         return redirect('process:detail', id)
 
 
-@login_required(login_url='process:loginPage', redirect_field_name='next')
+@ login_required(login_url='process:loginPage', redirect_field_name='next')
 def registerWithFile(request):
     file = request.FILES['file']
     value = register_process(file)

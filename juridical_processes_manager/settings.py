@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # django_select2
+    'django_select2',
     # applications
     'process', 'parts', 'movement', 'judge',
     # crispy_forms and bootstrap5

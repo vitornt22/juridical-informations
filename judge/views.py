@@ -54,11 +54,8 @@ class JudgeCreateView(CreateView):
 
     def form_valid(self, form):
         judge = form.save(commit=False)
-        if Judge.objects.filter(cnj=judge.cnj).exists():
-            messages.error(self.request, 'CNJ existente, tente novamente')
-        else:
-            judge.save()
-            messages.success(self.request, 'Juiz registrada com sucess')
+        judge.save()
+        messages.success(self.request, 'Juiz registrada com sucess')
 
     def post(self, request, *args, **kwargs):
         super().post(request, *args, **kwargs)
@@ -102,9 +99,8 @@ class JudgeList(ListView):
         search = self.request.GET.get('search')
         qs = super().get_queryset(*args, **kwargs)
         if search is not None:
-            qs = qs.filter(Q(
-                Q(name__icontains=search) |
-                Q(cnj__icontains=search))
+            qs = qs.filter(
+                Q(name__icontains=search)
             )
         return qs
 

@@ -65,13 +65,6 @@ class PartCreateView(CreateView):
         part.save()
         messages.success(self.request, 'Parte registrada com sucess')
 
-    def form_invalid(self, form):
-        part = form.data['cpf']
-        if Part.objects.filter(cpf=part).exists():
-            messages.error(self.request, 'CNJ existente, tente novamente')
-        else:
-            messages.error(self.request, 'Erro ao tentar registrar')
-
     def post(self, request, * args, **kwargs):
         super().post(request, *args, **kwargs)
         if self.request.path == '/processo/partes/registrar/':
@@ -117,8 +110,7 @@ class PartListView(ListView):
         if search:
             qs = qs.filter(Q(
                 Q(name__icontains=search) |
-                Q(category__icontains=search) |
-                Q(cpf__icontains=search)
+                Q(category__icontains=search)
             ))
 
         return qs

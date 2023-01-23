@@ -40,7 +40,7 @@ def register_movement(tags, process):
         if len(aux) == 3:
             d = aux[0].string
             date = datetime.strptime(str(d), '%d/%m/%Y').date()
-            description = aux[2].string
+            description = aux[2].string.replace('  ', '')
             movement = Movement(
                 date=date,  description=description, process=process)
             movement.save()
@@ -64,7 +64,7 @@ def set_tags(tags):
 
     # getting attrs of html
     list1 = ['' if i.string ==
-             '---' else i.string for i in part1[0].find_all(['span', 'div'])]
+             '---' else i.string for i in part1[0].find_all(['span'])]
     list2 = []
 
     for i in part1[1].find_all('div', {'class': 'col-2'}):
@@ -77,6 +77,8 @@ def set_tags(tags):
     # removing spaces in the string and convert str to float
     list2[-1] = float((list2[-1].replace('R$', '').strip()
                        ).replace('.', '').replace(',', '.'))
+
+    print(list1, list2)
 
     # create Model judeg to assign in model process
     judge = register_judge(list2[0])

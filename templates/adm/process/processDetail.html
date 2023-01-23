@@ -49,7 +49,7 @@
       <!-- /.card -->
     </div>
     <div  class="col-md-5">
-      <div  style="min-height:32rem; max-height:60rem;" class="card card-lightblue">
+      <div  style="overflow-y:auto min-height:32rem; max-height:60rem;" class="card card-lightblue">
         <div class="card-header">
           <h3 class="card-title">Partes</h3>
         </div>
@@ -98,10 +98,11 @@
     <div  class="col-md-7">
     </div>
 
-    <div  class="col-md-5">
-      <div  style="min-height:32rem; max-height:60rem;" class="card card-lightblue">
+    <div   class="col-md-5">
+      <div  style="overflow-y:auto; min-height:32rem; max-height:60rem;" class="card card-lightblue">
         <div class="card-header">
           <h3 class="card-title">Movimentações</h3>
+          
         </div>
        
         <table class="table">
@@ -148,6 +149,60 @@
 {%endblock content%}
 
 {%block addScript%}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#id_judge').select2({
+            ajax: {
+                url: '{% url 'process:register' %}',
+                dataType: 'json',
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {id: item.id, text: item.name};
+                        })
+                    };
+                }
+            },
+            minimumInputLength: 1
+        });
+    });
+
+    $(document).ready(function () {
+      $('#id_parts').select2({
+          multiple:true,
+          ajax: {
+              url: '{% url 'process:register' %}',
+              dataType: 'json',
+              data: function (params) {
+                var query = {
+                  search: params.term,
+                  type: 'public'
+                }
+          
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+              },
+              processResults: function (data) {
+                  return {
+                      results: $.map(data, function (item) {
+                          return {id: item.id, text: item.name};
+                      })
+                  };
+              }
+          },
+          minimumInputLength: 1
+      });
+  });
+
+
+  VirtualSelect.init({
+    ele: '#multipleSelect',
+    multiple: true
+
+  });
+</script>
 
 <script type="text/javascript">
   VirtualSelect.init({
