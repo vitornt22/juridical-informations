@@ -52,3 +52,6 @@ password: 123
 ### 4- Setup Finish: After that, you can utilize service offers to our project 
 
 To browse through pages of system to access functions and services by out system
+
+
+to consume htmls click on the "consumir html" button next to the "adicionar juiz" button on the process registration screen. The htmls are available at templates/htmls

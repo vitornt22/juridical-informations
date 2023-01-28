@@ -57,11 +57,6 @@ class PartCreateView(CreateView):
     template_name = 'adm/process/processRegister.html'
     success_url = 'process:register'
 
-    def get_context_data(self, **kwargs):
-        a = super().get_context_data(**kwargs)
-        print('VALUE', a.keys())
-        return a
-
     def form_valid(self, form):
         part = form.save(commit=False)
         part.save()
