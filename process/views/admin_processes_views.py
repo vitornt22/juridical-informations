@@ -1,16 +1,11 @@
-# flake8: noqa
-from random import randint
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404, JsonResponse
-from django.shortcuts import redirect, render
-from django.urls import reverse
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic import DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 
@@ -51,19 +46,19 @@ class ProcessUpdateView(UpdateView):
         process = context['process']
         context['movements'] = Movement.objects.filter(
             process=process).order_by('-date')
-        context['movementForm'] = MovementForm()
-        context['partForm'] = PartForm()
+        context['movement_form'] = MovementForm()
+        context['part_form'] = PartForm()
         context['active'] = 1
         context['number'] = None if process is None else process.number
-        context['judgeForm'] = JudgeForm()
+        context['judge_form'] = JudgeForm()
         context['judgeSelect'] = process.judge
         context['judges'] = Judge.objects.all()
         context['partPath'] = 'part:processDetailPart'
         context['judgePath'] = 'judge:processDetailJudge'
         p = Part.objects.all()
-        myParts = None if process is None else process.parts.all()
-        context['myParts'] = myParts
-        context['parts'] = p if myParts is None else p.difference(myParts)
+        my_parts = None if process is None else process.parts.all()
+        context['myParts'] = my_parts
+        context['parts'] = p if my_parts is None else p.difference(my_parts)
         return context
 
     def form_valid(self, form):
@@ -114,8 +109,8 @@ class ProcessCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         context['parts'] = Part.objects.all()
         context['active'] = 1
-        context['partForm'] = PartForm()
-        context['judgeForm'] = JudgeForm()
+        context['part_form'] = PartForm()
+        context['judge_form'] = JudgeForm()
         context['partPath'] = 'part:processPartRegister'
         context['judgePath'] = 'judge:registerProcessJudge'
         return context
@@ -189,14 +184,14 @@ class ProcessDeleteView(View):
 class ShutDownPart(View):
     # method to shut down part of its respective process. OBS: this method
     # dont delete part, just remove of many to many relationship
-    def get(self, request, id=None, idPart=None):
+    def get(self, request, id=None, id_part=None):
         # get process
         process = Process.objects.get(id=id)
 
         # if process not is null, then get part,
         # remove of relationship, and redirect to process detail page
-        if process != None:
-            part = process.parts.get(id=idPart)
+        if process is not None:
+            part = process.parts.get(id=id_part)
             process.parts.remove(part)
             messages.success(
                 self.request, 'Parte desligada com sucesso com sucesso')
@@ -204,13 +199,16 @@ class ShutDownPart(View):
 
 
 @ login_required(login_url='process:loginPage', redirect_field_name='next')
-def registerWithFile(request):
+def register_with_file(request):
     file = request.FILES['file']
     value = register_process(file)
-    if value == True:
+    if value is True:
         messages.success(request, 'Processo Cadastrado com Sucesso ! ')
         return redirect('process:list')
     else:
         messages.error(
-            request, 'Erro ao tentar cadastrar.Arquivo inválido ou o Processo  já está Cadastrado')
+            request,
+            'Erro ao tentar cadastrar.Arquivo inválido ou o Processo' +
+            ' já está Cadastrado'
+        )
         return redirect('process:register')

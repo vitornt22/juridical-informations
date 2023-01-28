@@ -120,11 +120,14 @@
             <tr class="">
               <td>{{i.date}}</td>
               <td style="word-break: break-word;">{{i.description}}</td>
-              <td><a href="{%url 'movement:detail' i.process.id  i.id %}" class="btn btn-primary">Editar</a>
-                <td><a href="{%url 'movement:delete' i.id %}" class="btn btn-danger">Remover</a>
+              <td><a href="{%url 'movement:detail' i.process.id  i.id %}"  class="btn btn-primary">Editar</a></td>
+                <td><a href="{%url 'movement:delete' i.id %}" class="btn btn-danger">Remover</a></td>
+
 
             </tr>
             {% endfor %}
+            <tr>
+            </tr>
            
           </tbody>
         </table>

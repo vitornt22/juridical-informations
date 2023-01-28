@@ -1,14 +1,9 @@
-# flake8: noqa: E501
-import datetime
 import re
 
 from django import forms
-from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.core.exceptions import ValidationError
-from django_select2 import forms as s2forms
 
 from judge.models import Judge
-from juridical_processes_manager import settings
 from parts.models import Part
 
 from .models import Process
@@ -17,7 +12,10 @@ from .models import Process
 class ProcessForm(forms.ModelForm):
 
     parts = forms.ModelMultipleChoiceField(
-        widget=forms.SelectMultiple(attrs={'style': 'width:100%;'}),  queryset=Part.objects.all())
+        widget=forms.SelectMultiple(
+            attrs={'style': 'width:100%;'}),
+        queryset=Part.objects.all()
+    )
 
     class Meta:
         model = Process
@@ -39,24 +37,48 @@ class ProcessForm(forms.ModelForm):
         }
 
         widgets = {
-               'id': forms.HiddenInput(),
-               'number': forms.TextInput(attrs={'placeholder': ' Nº do Processo',  'class': 'form-control',  'maxlength': "25", 'data-mask': '9999999-99.9999.9.99.9999'}),  # noqa
-               'class_process': forms.TextInput(attrs={'placeholder': ' Classe',  'class': 'form-control', 'class': 'form-control'}),  # noqa
-               'court': forms.TextInput(attrs={'placeholder': ' Vara',  'class': 'form-control'}),  # noqa
-               'forum': forms.TextInput(attrs={'placeholder': ' Foro',  'class': 'form-control'}),  # noqa
-               'subject': forms.TextInput(attrs={'placeholder': ' Assunto',  'class': 'form-control'}),  # noqa
-               'county': forms.TextInput(attrs={'placeholder': ' Comarca', 'class': 'form-control'}),  # noqa
-               'value': forms.NumberInput(attrs={'placeholder': ' Valor',  'class': 'form-control'}),  # noqa
-               'organ': forms.TextInput(attrs={'placeholder': ' Orgão',  'class': 'form-control'}),  # noqa
-               'area': forms.TextInput(attrs={'placeholder': ' Área',  'class': 'form-control'}),  # noqa
-               'controll': forms.TextInput(attrs={'class': 'form-control'}),  # noqa
-              'judge': forms.Select(attrs={'style': 'width:100%;', 'placeholder': 'Juiz', 'class': ''}),
-           }
+            'id': forms.HiddenInput(),
+            'number': forms.TextInput(attrs={
+                'placeholder': ' Nº do Processo',  'class': 'form-control',
+                'maxlength': "25", 'data-mask': '9999999-99.9999.9.99.9999'}
+            ),
+            'class_process': forms.TextInput(attrs={
+                'placeholder': ' Classe',  'class': 'form-control',
+                'class': 'form-control'}
+            ),
+            'court': forms.TextInput(attrs={
+                'placeholder': ' Vara',  'class': 'form-control'}
+            ),
+            'forum': forms.TextInput(attrs={
+                'placeholder': ' Foro',  'class': 'form-control'}
+            ),
+            'subject': forms.TextInput(attrs={
+                'placeholder': ' Assunto',  'class': 'form-control'}
+            ),
+            'county': forms.TextInput(attrs={
+                'placeholder': ' Comarca', 'class': 'form-control'}
+            ),
+            'value': forms.NumberInput(attrs={
+                'placeholder': ' Valor',  'class': 'form-control'}
+            ),
+            'organ': forms.TextInput(attrs={
+                'placeholder': ' Orgão',  'class': 'form-control'}
+            ),
+            'area': forms.TextInput(attrs={
+                'placeholder': ' Área',  'class': 'form-control'}
+            ),
+            'controll': forms.TextInput(attrs={
+                'class': 'form-control'}
+            ),
+            'judge': forms.Select(attrs={
+                'style': 'width:100%;', 'placeholder': 'Juiz', 'class': ''}
+            ),
+        }
 
     def clean_number(self):
         number = self.cleaned_data['number']
         regex = re.compile(
-            r'^[0-9]{7}[-]?[0-9]{2}[.]?[0-9]{4}[.]?[0-9]{1}[.]?[0-9]{2}[.]?[0-9]{4}$')
+            r'^[0-9]{7}[-]?[0-9]{2}[.]?[0-9]{4}[.]?[0-9]{1}[.]?[0-9]{2}[.]?[0-9]{4}$')  # noqa
 
         if not regex.match(number):
             raise ValidationError('Formato não suportado ')

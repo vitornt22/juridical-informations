@@ -1,18 +1,13 @@
 # Create your views here.
-# flake8: noqa
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import Http404
-from django.http.response import Http404
-from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-
-from process.forms import ProcessForm
 
 from .forms import JudgeForm
 from .models import Judge
@@ -105,9 +100,9 @@ class JudgeList(ListView):
         return qs
 
     def get_context_data(self, *args, **kwargs):
-        judgeForm = JudgeForm()
+        judge_form = JudgeForm()
         ctx = super().get_context_data(*args, **kwargs)
         ctx['judgePath'] = 'judge:RegisterJudge'
         ctx.update({"active": 3, 'tag': 'Juiz',
-                   'judgeForm': judgeForm, 'path': 'list'})
+                   'judge_form': judge_form, 'path': 'list'})
         return ctx

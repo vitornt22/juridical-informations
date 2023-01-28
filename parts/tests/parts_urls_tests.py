@@ -29,7 +29,7 @@ class PartUrlsTest(TestCase):
 
     def test_part_detail_part_process_url_is_correct(self):
         url_detail = reverse('part:processDetailEditPart',
-                             kwargs={'pk': 1, 'idP': 1})
+                             kwargs={'pk': 1, 'id_process': 1})
         self.assertEqual(url_detail, '/process/1/editarParte/1/')
 
     def test_part_delete_url_is_correct(self):

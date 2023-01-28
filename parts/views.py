@@ -8,10 +8,6 @@ from django.views import View
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 
-from judge.forms import JudgeForm
-from judge.models import Judge
-from process.forms import ProcessForm
-
 from .forms import PartForm
 from .models import Part
 
@@ -28,9 +24,10 @@ class PartUpdateView(UpdateView):
 
     def get_context_data(self,  **kwargs):
         context = super().get_context_data(**kwargs)
-        context['idP'] = self.kwargs.get('idP')
+        context['id_process'] = self.kwargs.get('id_process')
         # flake8
-        context['path'] = 'process:detail' if context['idP'] is not None else 'part:list'
+        context['path'] = 'process:detail' if context['id_process'] \
+            is not None else 'part:list'
         return context
 
     def form_valid(self, form):
@@ -40,14 +37,14 @@ class PartUpdateView(UpdateView):
 
     def post(self, request, *args, **kwargs):
         super().post(request, *args, **kwargs)
-        id_process = self.kwargs.get('idP')
+        id_process = self.kwargs.get('id_process')
         pk = self.kwargs.get('pk')
 
         if id_process is None:
             return redirect('part:list')
         else:
             return redirect('part:processDetailEditPart',
-                            idP=id_process, pk=pk)
+                            id_process=id_process, pk=pk)
 
 
 @method_decorator(
@@ -59,6 +56,11 @@ class PartCreateView(CreateView):
     form_class = PartForm
     template_name = 'adm/process/processRegister.html'
     success_url = 'process:register'
+
+    def get_context_data(self, **kwargs):
+        a = super().get_context_data(**kwargs)
+        print('VALUE', a.keys())
+        return a
 
     def form_valid(self, form):
         part = form.save(commit=False)
@@ -120,5 +122,5 @@ class PartListView(ListView):
         ctx = super().get_context_data(*args, **kwargs)
         ctx['partPath'] = 'part:register'
         ctx.update({"active": 2, 'tag': 'Parto',
-                   'path': 'list', 'partForm': part_form})
+                   'path': 'list', 'part_form': part_form})
         return ctx

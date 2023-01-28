@@ -2,8 +2,6 @@
 from datetime import datetime
 
 from bs4 import BeautifulSoup
-from dateutil.parser import parse
-from django.contrib import messages
 
 from judge.models import Judge
 from movement.models import Movement
@@ -49,11 +47,12 @@ def register_movement(tags, process):
 def set_tags(tags):
     # save number and status of process
     number_process = tags[0].h4.text.replace('\n', ' ').strip()
+    status = None
 
     # getting the status of process
     try:
         status = 'Ativo' in tags[0].h4.span.string
-    except:
+    except:  # noqa
         status = False
 
     # separating and  saving a most of the attrs to add into Process Model
@@ -70,15 +69,13 @@ def set_tags(tags):
     for i in part1[1].find_all('div', {'class': 'col-2'}):
         try:
             a = i.span.string
-        except:
+        except:  # noqa
             a = i.div.string
         list2.append('' if '---' in a else a)
 
     # removing spaces in the string and convert str to float
     list2[-1] = float((list2[-1].replace('R$', '').strip()
                        ).replace('.', '').replace(',', '.'))
-
-    print(list1, list2)
 
     # create Model judeg to assign in model process
     judge = register_judge(list2[0])
@@ -98,7 +95,8 @@ def set_tags(tags):
             distribution=distribution,
             controll=list2[2],
             area=list2[3],
-            value=list2[4]
+            value=list2[4],
+            status=status
         )
 
         process.save()

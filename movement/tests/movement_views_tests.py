@@ -24,7 +24,7 @@ def createMovement():
 
 
 def createProcess():
-    judge = Judge.objects.create(name='judge', cnj='23324')
+    judge = Judge.objects.create(name='judge')
     process = Process.objects.create(
         number="334329", class_process="criminal",
         forum="Forum 1", subject="objective",
@@ -44,14 +44,14 @@ class MovementViewsTest(TestCase):
         login(self)
         createMovement()
         view = resolve(reverse('movement:register',
-                       kwargs={'idProcess': 1}))
+                       kwargs={'id_process': 1}))
         self.assertIs(view.func.view_class, views.MovementCreateView)
 
     def test_movement_detail_views_function_is_correct(self):
         login(self)
         createMovement()
         view = resolve(reverse('movement:detail',
-                       kwargs={'pk': 1, 'idProcess': 1}))
+                       kwargs={'pk': 1, 'id_process': 1}))
         self.assertIs(view.func.view_class, views.MovementUpdateView)
 
     def test_movement_delete_views_function_is_correct(self):
@@ -64,7 +64,7 @@ class MovementViewsTest(TestCase):
         login(self)
         createMovement()
         response = self.client.post(
-            reverse('movement:register', kwargs={'idProcess': 1}), {'date': "22/07/2022", 'description': "234232", "process": 1}, follow=True)
+            reverse('movement:register', kwargs={'id_process': 1}), {'date': "22/07/2022", 'description': "234232", "process": 1}, follow=True)
         self.assertEqual(response.status_code, 200)
 
     def test_movement_delete_views_function_is_status_code_200_founded(self):
@@ -74,7 +74,7 @@ class MovementViewsTest(TestCase):
 
     def test_movement_update_views_function_is_status_code_200_founded(self):
         response = self.client.get(
-            reverse('movement:detail', kwargs={'pk': 1, 'idProcess': 1}), follow=True)
+            reverse('movement:detail', kwargs={'pk': 1, 'id_process': 1}), follow=True)
         self.assertEqual(response.status_code, 200)
 
     # Exists Movement tests
@@ -82,14 +82,14 @@ class MovementViewsTest(TestCase):
         login(self)
         createMovement()
         response = self.client.get(
-            reverse('movement:detail', kwargs={'pk': 1, 'idProcess': 1}))
+            reverse('movement:detail', kwargs={'pk': 1, 'id_process': 1}))
         self.assertEqual(response.status_code, 200)
 
     def test_404_in_jugde_that_no_exists(self):
         login(self)
         createMovement()
         response = self.client.get(
-            reverse('movement:detail', kwargs={'pk': 10000, 'idProcess': 1}))
+            reverse('movement:detail', kwargs={'pk': 10000, 'id_process': 1}))
         self.assertEqual(response.status_code, 404)
 
     # redirects vies tests
@@ -97,7 +97,7 @@ class MovementViewsTest(TestCase):
         login(self)
         createProcess()
         post = self.client.post(
-            reverse('movement:register', kwargs={'idProcess': 1}),
+            reverse('movement:register', kwargs={'id_process': 1}),
             {'date': "22/07/2000", 'description': "sskskkks", "process": 1})
         self.assertRedirects(post, reverse(
             'process:detail', kwargs={'pk': 1}))
@@ -106,7 +106,7 @@ class MovementViewsTest(TestCase):
         login(self)
         createMovement()
         post = self.client.post(
-            reverse('movement:detail', kwargs={'idProcess': 1, 'pk': 1}),
+            reverse('movement:detail', kwargs={'id_process': 1, 'pk': 1}),
             {'date': "22/07/2003", 'description': "sskskkks", "process": 1})
         self.assertRedirects(post, reverse(
             'process:detail', kwargs={'pk': 1}))
@@ -115,7 +115,7 @@ class MovementViewsTest(TestCase):
         login(self)
         createMovement()
         post = self.client.post(
-            reverse('movement:detail', kwargs={'idProcess': 1, 'pk': 1}),
+            reverse('movement:detail', kwargs={'id_process': 1, 'pk': 1}),
             {'date': "22/07/2003", 'description': "sskskkks", "process": 1})
         self.assertRedirects(post, reverse(
             'process:detail', kwargs={'pk': 1}))
@@ -126,6 +126,6 @@ class MovementViewsTest(TestCase):
         login(self)
         createMovement()
         post = self.client.get(
-            reverse('movement:detail', kwargs={'idProcess': 1, 'pk': 1}))
+            reverse('movement:detail', kwargs={'id_process': 1, 'pk': 1}))
 
         self.assertTemplateUsed(post, 'adm/movement/movementDetail.html')

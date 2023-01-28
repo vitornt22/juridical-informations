@@ -11,4 +11,4 @@ class Movement(models.Model):
         Process, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self) -> str:
-        return str(self.id) + " - " + self.process.number
+        return str(self.id) + " - "

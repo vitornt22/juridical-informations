@@ -1,4 +1,3 @@
-# flake8: noqa
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
@@ -49,7 +48,10 @@ class LoginPage(View):
 class ProcessClientsDetail(View):
     def get(self, request, id=None):
         process = Process.objects.filter(id=id).first()
-        return render(request, 'clients/details.html', {'process': process, 'active': 2})
+        return render(
+            request, 'clients/details.html',
+            {'process': process, 'active': 2}
+        )
 
 
 # class to process list to clients,without option
@@ -66,10 +68,14 @@ class ListingProcess(ListView):
         if search:
             qs = qs.filter(Q(
                 Q(number__icontains=search) |
-                Q(court__icontains=search) | Q(forum__icontains=search) |
-                Q(judge__name__icontains=search) | Q(class_process__icontains=search) |
-                Q(subject__icontains=search) | Q(organ__icontains=search) |
-                Q(area__icontains=search) | Q(county__icontains=search)
+                Q(court__icontains=search) |
+                Q(forum__icontains=search) |
+                Q(judge__name__icontains=search) |
+                Q(class_process__icontains=search) |
+                Q(subject__icontains=search) |
+                Q(organ__icontains=search) |
+                Q(area__icontains=search) |
+                Q(county__icontains=search)
             ))
 
         return qs

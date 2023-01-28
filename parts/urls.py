@@ -1,5 +1,4 @@
 
-# flake8: noqa
 from django.urls import path
 
 from . import views
@@ -8,8 +7,9 @@ app_name = 'part'
 urlpatterns = [
     path('partes/', views.PartListView.as_view(), name='list'),
     # edit urls
-    path('editarParte/<int:pk>/', views.PartUpdateView.as_view(), name='detail'),
-    path('process/<int:idP>/editarParte/<int:pk>/',
+    path('editarParte/<int:pk>/',
+         views.PartUpdateView.as_view(), name='detail'),
+    path('process/<int:id_process>/editarParte/<int:pk>/',
          views.PartUpdateView.as_view(), name="processDetailEditPart"),
     # register urls
     path('partes/novaParte/',

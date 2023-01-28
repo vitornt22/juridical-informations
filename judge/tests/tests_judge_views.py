@@ -15,7 +15,7 @@ def login(self):
 
 
 def createJudge():
-    judge = Judge.objects.create(name='judge', cnj='123')
+    judge = Judge.objects.create(name='judge')
     return judge
 
 
@@ -52,12 +52,12 @@ class JudgeViewsTest(TestCase):
 
     def test_judge_register_views_function_is_status_code_200_founded(self):
         response = self.client.post(
-            reverse('judge:RegisterJudge'), {'name': "teste123", 'cnj': "234232"}, follow=True)
+            reverse('judge:RegisterJudge'), {'name': "teste123"}, follow=True)
         self.assertEqual(response.status_code, 200)
 
     def test_judge_register_views_in_process_register_page_function_is_status_code_200_founded(self):
         response = self.client.post(
-            reverse('judge:registerProcessJudge'), {'name': "teste123", 'cnj': "234232"}, follow=True)
+            reverse('judge:registerProcessJudge'), {'name': "teste123"}, follow=True)
         self.assertEqual(response.status_code, 200)
 
     def test_judge_delete_views_function_is_status_code_200_founded(self):
@@ -67,7 +67,7 @@ class JudgeViewsTest(TestCase):
 
     def test_create_view_judge_in_register_process_page_status_code(self):
         post = self.client.post(
-            reverse('judge:registerProcessJudge'), {'name': "teste123", 'cnj': "234232"}, follow=True)
+            reverse('judge:registerProcessJudge'), {'name': "teste123"}, follow=True)
         self.assertEqual(post.status_code, 200)
 
     # Exists Judge tests
@@ -87,13 +87,13 @@ class JudgeViewsTest(TestCase):
     def test_redirect_create_view_register_judge(self):
         login(self)
         post = self.client.post(
-            reverse('judge:RegisterJudge'), {'name': "teste123", 'cnj': "234232"}, follow=True)
+            reverse('judge:RegisterJudge'), {'name': "teste123"}, follow=True)
         self.assertRedirects(post, reverse('judge:list'))
 
     def test_redirect_create_view_register_judge_in_process_register_page(self):
         login(self)
         post = self.client.post(
-            reverse('judge:registerProcessJudge'), {'name': "teste123", 'cnj': "234232"}, follow=True)
+            reverse('judge:registerProcessJudge'), {'name': "teste123"}, follow=True)
         self.assertRedirects(post, reverse('process:register'))
 
     # test template views

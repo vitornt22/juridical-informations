@@ -20,7 +20,7 @@ class Process (models.Model):
     controll = models.CharField(max_length=50, null=True, blank=True)
     distribution = models.DateField(auto_now_add=True)
     judge = models.ForeignKey(
-        Judge, on_delete=models.CASCADE, null=False, blank=False)
+        Judge, on_delete=models.SET_NULL, null=True, blank=True)
     value = models.FloatField(null=False, blank=False)
     status = models.BooleanField(default=True, null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)

@@ -1,6 +1,7 @@
 # Create your views here.
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -24,30 +25,33 @@ class MovementCreateView(CreateView):
 
     def form_invalid(self, form):
         try:
+            redirect_function = super().form_valid(form)
             messages.error(self.request, 'Erro ao registrar, tente novamente')
-            return super().form_valid(form)
-        except:
+            return redirect_function
+        except redirect_function is None:
             messages.error(self.request, 'Erro: Data pode ser inválida')
-            idProcess = self.kwargs.get('idProcess')
-            return redirect('process:detail', idProcess)
+            id_process = self.kwargs.get('id_process')
+            return redirect('process:detail', id_process)
 
     def form_valid(self, form):
         movement = form.save(commit=False)
         movement.save()
-        idProcess = self.kwargs.get('idProcess')
-        if idProcess is not None:
-            movement.process = Process.objects.filter(id=idProcess).first()
+        id_process = self.kwargs.get('id_process')
+        if id_process is not None:
+            movement.process = Process.objects.filter(id=id_process).first()
             movement.save()
         messages.success(self.request, 'Movimentação registrada com sucesso')
 
-    def post(self, request, idProcess=None, *args, **kwargs):
-        super().post(request, idProcess, *args, **kwargs)
-        return redirect('process:detail', idProcess)
+    def post(self, request, id_process=None, *args, **kwargs):
+        super().post(request, id_process, *args, **kwargs)
+        return redirect('process:detail', id_process)
 
 
-@method_decorator(
+@ method_decorator(
     login_required(login_url='process:loginPage', redirect_field_name='next'),
     name='dispatch'
+
+
 )
 class MovementUpdateView(UpdateView):
     model = Movement
@@ -57,7 +61,7 @@ class MovementUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['idProcess'] = self.kwargs.get('idProcess')
+        context['id_process'] = self.kwargs.get('id_process')
         return context
 
     def form_valid(self, form):
@@ -65,6 +69,10 @@ class MovementUpdateView(UpdateView):
         movement.save()
         messages.success(self.request, 'Dados Editados')
         return redirect('process:detail', movement.process.id)
+
+    def post(self, request, id_process=None, *args, **kwargs):
+        super().post(request, id_process, *args, **kwargs)
+        return redirect('process:detail', id_process)
 
 
 @ method_decorator(

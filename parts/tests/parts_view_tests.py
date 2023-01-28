@@ -17,12 +17,12 @@ def login(self):
 
 
 def createPart():
-    part = Part.objects.create(name='parts', cpf='123')
+    part = Part.objects.create(name='parts')
     return part
 
 
 def createProcess():
-    judge = Judge.objects.create(name='judge', cnj='23324')
+    judge = Judge.objects.create(name='judge')
     process = Process.objects.create(
         number="334329", class_process="criminal",
         forum="Forum 1", subject="objective",
@@ -65,12 +65,12 @@ class PartViewsTest(TestCase):
 
     def test_parts_register_views_function_is_status_code_200_founded(self):
         response = self.client.post(
-            reverse('part:register'), {'name': "teste123", 'cpf': "234232"}, follow=True)
+            reverse('part:register'), {'name': "teste123"}, follow=True)
         self.assertEqual(response.status_code, 200)
 
     def test_parts_register_views_in_process_register_page_function_is_status_code_200_founded(self):
         response = self.client.post(
-            reverse('part:processPartRegister'), {'name': "teste123", 'cpf': "234232"}, follow=True)
+            reverse('part:processPartRegister'), {'name': "teste123"}, follow=True)
         self.assertEqual(response.status_code, 200)
 
     def test_parts_delete_views_function_is_status_code_200_founded(self):
@@ -80,7 +80,7 @@ class PartViewsTest(TestCase):
 
     def test_create_view_parts_in_register_process_page_status_code(self):
         post = self.client.post(
-            reverse('part:processPartRegister'), {'name': "teste123", 'cpf': "234232"}, follow=True)
+            reverse('part:processPartRegister'), {'name': "teste123"}, follow=True)
         self.assertEqual(post.status_code, 200)
 
     # Exists Part tests
@@ -101,11 +101,11 @@ class PartViewsTest(TestCase):
     def test_redirect_create_view_register_parts(self):
         login(self)
         post = self.client.post(
-            reverse('part:register'), {'name': "teste123", 'cpf': "234232"}, follow=True)
+            reverse('part:register'), {'name': "teste123"}, follow=True)
         self.assertRedirects(post, reverse('part:list'))
 
     def test_redirect_create_view_register_parts_in_process_register_page(self):
         login(self)
         post = self.client.post(
-            reverse('part:processPartRegister'), {'name': "teste123", 'cpf': "234232"}, follow=True)
+            reverse('part:processPartRegister'), {'name': "teste123"}, follow=True)
         self.assertRedirects(post, reverse('process:register'))

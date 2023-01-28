@@ -14,11 +14,11 @@
         </div>
         <!-- /.card-header -->
         <!-- form start -->
-          {% if idP == None  %}
+          {% if id_process == None  %}
          
           <form method="POST" action="{%url 'part:detail' object.id %}" enctype="multipart/form-data">
           {% else %}
-          <form method="POST" action="{%url 'part:processDetailEditPart'  idP object.id%}" enctype="multipart/form-data">
+          <form method="POST" action="{%url 'part:processDetailEditPart'  id_process object.id%}" enctype="multipart/form-data">
             {% endif %}
           {% csrf_token %}
 
@@ -28,10 +28,10 @@
           </div>
           <div class="card-footer">
 
-            {% if idP == None  %}
+            {% if id_process == None  %}
             <a href="{%url path  %}" type="button" class="btn bg-lightblue">Voltar</a>
             {% else %}
-            <a href="{%url path idP %}" type="button" class="btn bg-lightblue">Voltar</a>
+            <a href="{%url path id_process %}" type="button" class="btn bg-lightblue">Voltar</a>
             {% endif %}
             <button type="submit" value="r" name="register" class="btn btn-primary">Cadastrar</button>
           </div>

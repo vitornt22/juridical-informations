@@ -49,5 +49,5 @@ class ProcessUrlsTest(TestCase):
 
     def test_process_shut_down_url_is_correct(self):
         url_shut_down = reverse('process:shutdown', kwargs={
-                                'id': 1, 'idPart': 1})
+                                'id': 1, 'id_part': 1})
         self.assertEqual(url_shut_down, '/desligarParte/1/1')

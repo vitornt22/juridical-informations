@@ -11,7 +11,7 @@
         <form method="POST" action="{%url 'movement:register' object.id %}">
         {% csrf_token %}
         <div class="modal-body">
-            {{movementForm}}
+            {{movement_form}}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>

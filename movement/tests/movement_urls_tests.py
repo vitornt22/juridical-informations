@@ -7,12 +7,12 @@ from django.urls import reverse
 class MovementUrlsTest(TestCase):
 
     def test_movement_register_url_is_correct(self):
-        url_register = reverse('movement:register', kwargs={'idProcess': 1})
+        url_register = reverse('movement:register', kwargs={'id_process': 1})
         self.assertEqual(url_register, '/registrarMovimentacao/1/')
 
     def test_movement_detail_url_is_correct(self):
         url_detail = reverse('movement:detail', kwargs={
-                             'pk': 1, 'idProcess': 1})
+                             'pk': 1, 'id_process': 1})
         self.assertEqual(url_detail, '/editar/Movimentacao/1/1/')
 
     def test_movement_delete_url_is_correct(self):
